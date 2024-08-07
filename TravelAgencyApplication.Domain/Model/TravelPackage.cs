@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,7 @@ namespace TravelAgencyApplication.Domain.Model
      public double BasePrice { get; set; }
      public DateTime DepartureDate { get; set; }
      public DateTime ReturnDate { get; set; }
-    // number of days
-    public int Duration {  get; set; }
+
     public Guid DestinationId { get; set; }
     public Destination? Destination { get; set; }
 
@@ -28,16 +28,12 @@ namespace TravelAgencyApplication.Domain.Model
     public int Views {  get; set; }
 
     public Season Season { get; set; }
-    public virtual List<TravelPackageAccomodationImage>? TravelPackageAccomodationImages { get; set; }
-    public virtual List<TravelPackageLocationImage>? TravelPackageLocationImages { get; set; }
     public virtual List<Tag>? Tags { get; set; }
-
     public virtual ICollection<TravelPackageItinerary>? Itineraries { get; set; }
     public virtual List<DepartureLocation>? DepartureLocations { get; set; }
-
     public string? UserId { get; set; }
-    public TAUser? User { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public TAUser? Guide { get; set; }
     public TransportType TransportType { get; set; }
-
     }
 }

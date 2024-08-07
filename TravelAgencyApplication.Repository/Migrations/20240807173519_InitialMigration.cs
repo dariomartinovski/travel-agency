@@ -78,18 +78,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ByteArray = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
@@ -264,7 +252,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     BasePrice = table.Column<double>(type: "float", nullable: false),
                     DepartureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false),
                     DestinationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaxCapacity = table.Column<int>(type: "int", nullable: false),
                     CurrentCapacity = table.Column<int>(type: "int", nullable: false),
@@ -370,31 +357,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TravelPackageAccomodationImage",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TravelPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TravelPackageAccomodationImage", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TravelPackageAccomodationImage_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TravelPackageAccomodationImage_TravelPackages_TravelPackageId",
-                        column: x => x.TravelPackageId,
-                        principalTable: "TravelPackages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TravelPackageItinerary",
                 columns: table => new
                 {
@@ -417,31 +379,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                         principalTable: "TravelPackages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TravelPackageLocationImage",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TravelPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TravelPackageLocationImage", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TravelPackageLocationImage_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TravelPackageLocationImage_TravelPackages_TravelPackageId",
-                        column: x => x.TravelPackageId,
-                        principalTable: "TravelPackages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -524,16 +461,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                 column: "TravelPackagesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageAccomodationImage_ImageId",
-                table: "TravelPackageAccomodationImage",
-                column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageAccomodationImage_TravelPackageId",
-                table: "TravelPackageAccomodationImage",
-                column: "TravelPackageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TravelPackageItinerary_ItineraryId",
                 table: "TravelPackageItinerary",
                 column: "ItineraryId");
@@ -541,16 +468,6 @@ namespace TravelAgencyApplication.Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TravelPackageItinerary_TravelPackageId",
                 table: "TravelPackageItinerary",
-                column: "TravelPackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageLocationImage_ImageId",
-                table: "TravelPackageLocationImage",
-                column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageLocationImage_TravelPackageId",
-                table: "TravelPackageLocationImage",
                 column: "TravelPackageId");
 
             migrationBuilder.CreateIndex(
@@ -592,13 +509,7 @@ namespace TravelAgencyApplication.Repository.Migrations
                 name: "TagTravelPackage");
 
             migrationBuilder.DropTable(
-                name: "TravelPackageAccomodationImage");
-
-            migrationBuilder.DropTable(
                 name: "TravelPackageItinerary");
-
-            migrationBuilder.DropTable(
-                name: "TravelPackageLocationImage");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -608,9 +519,6 @@ namespace TravelAgencyApplication.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Itineraries");
-
-            migrationBuilder.DropTable(
-                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "TravelPackages");

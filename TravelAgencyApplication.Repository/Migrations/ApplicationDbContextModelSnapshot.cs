@@ -324,21 +324,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.ToTable("Destinations");
                 });
 
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("ByteArray")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Itinerary", b =>
                 {
                     b.Property<Guid>("Id")
@@ -442,9 +427,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
                     b.Property<int>("MaxCapacity")
                         .HasColumnType("int");
 
@@ -475,27 +457,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.ToTable("TravelPackages");
                 });
 
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageAccomodationImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TravelPackageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("TravelPackageId");
-
-                    b.ToTable("TravelPackageAccomodationImage");
-                });
-
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageItinerary", b =>
                 {
                     b.Property<Guid>("Id")
@@ -515,27 +476,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasIndex("TravelPackageId");
 
                     b.ToTable("TravelPackageItinerary");
-                });
-
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageLocationImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TravelPackageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("TravelPackageId");
-
-                    b.ToTable("TravelPackageLocationImage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -676,32 +616,13 @@ namespace TravelAgencyApplication.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelAgencyApplication.Domain.Identity.TAUser", "User")
+                    b.HasOne("TravelAgencyApplication.Domain.Identity.TAUser", "Guide")
                         .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Destination");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageAccomodationImage", b =>
-                {
-                    b.HasOne("TravelAgencyApplication.Domain.Model.Image", "Image")
-                        .WithMany("TravelPackageAccomodationImages")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
-                        .WithMany("TravelPackageAccomodationImages")
-                        .HasForeignKey("TravelPackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("TravelPackage");
+                    b.Navigation("Guide");
                 });
 
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageItinerary", b =>
@@ -723,35 +644,9 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Navigation("TravelPackage");
                 });
 
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageLocationImage", b =>
-                {
-                    b.HasOne("TravelAgencyApplication.Domain.Model.Image", "Image")
-                        .WithMany("TravelPackageLocationImages")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
-                        .WithMany("TravelPackageLocationImages")
-                        .HasForeignKey("TravelPackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("TravelPackage");
-                });
-
             modelBuilder.Entity("TravelAgencyApplication.Domain.Identity.TAUser", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Image", b =>
-                {
-                    b.Navigation("TravelPackageAccomodationImages");
-
-                    b.Navigation("TravelPackageLocationImages");
                 });
 
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Itinerary", b =>
@@ -764,10 +659,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Navigation("DepartureLocations");
 
                     b.Navigation("Itineraries");
-
-                    b.Navigation("TravelPackageAccomodationImages");
-
-                    b.Navigation("TravelPackageLocationImages");
                 });
 #pragma warning restore 612, 618
         }

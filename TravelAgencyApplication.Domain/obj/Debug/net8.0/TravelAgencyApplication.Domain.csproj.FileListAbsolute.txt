@@ -10,3 +10,4 @@ C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Domain\ob
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Domain\obj\Debug\net8.0\refint\TravelAgencyApplication.Domain.dll
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Domain\obj\Debug\net8.0\TravelAgencyApplication.Domain.pdb
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Domain\obj\Debug\net8.0\ref\TravelAgencyApplication.Domain.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Domain\obj\Debug\net8.0\TravelAgencyApplication.Domain.sourcelink.json

@@ -9,11 +9,8 @@ namespace TravelAgencyApplication.Domain.Model
     public class TravelPackageItinerary: BaseEntity
     {
         public TravelPackage? TravelPackage { get; set; }
-
         public Guid TravelPackageId { get; set; }
-
         public Itinerary? Itinerary { get; set; }
-
         public Guid ItineraryId { get; set; }
     }
 }

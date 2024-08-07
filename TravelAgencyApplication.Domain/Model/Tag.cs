@@ -9,7 +9,6 @@ namespace TravelAgencyApplication.Domain.Model
     public class Tag : BaseEntity
     {
         public string Name { get; set; }
-
         public virtual List<TravelPackage>? TravelPackages { get; set; }
     }
 }

@@ -11,7 +11,6 @@ namespace TravelAgencyApplication.Domain.Model
         public Country? Country { get; set; }
         public Guid CountryId { get; set; }
         public Guid CityId { get; set; }
-
         public City? City { get; set; }
 
     }

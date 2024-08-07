@@ -150,3 +150,4 @@ C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Web\obj\D
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Web\obj\Debug\net8.0\TravelAgencyApplication.Web.genruntimeconfig.cache
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Web\obj\Debug\net8.0\ref\TravelAgencyApplication.Web.dll
 C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Web\obj\Debug\net8.0\TravelAgencyApplication.Web.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Web\obj\Debug\net8.0\TravelAgencyApplication.Web.sourcelink.json
