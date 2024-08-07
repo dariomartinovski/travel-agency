@@ -1,0 +1,17 @@
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.csproj.AssemblyReference.cache
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.AssemblyInfoInputs.cache
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.AssemblyInfo.cs
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.csproj.CoreCompileInputs.cache
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Service.deps.json
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Service.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Service.pdb
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Domain.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Repository.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Domain.pdb
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\bin\Debug\net8.0\TravelAgencyApplication.Repository.pdb
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAg.AFC50ACA.Up2Date
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\refint\TravelAgencyApplication.Service.dll
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\TravelAgencyApplication.Service.pdb
+C:\Users\dario\Desktop\TravelAgencyApplication\TravelAgencyApplication.Service\obj\Debug\net8.0\ref\TravelAgencyApplication.Service.dll

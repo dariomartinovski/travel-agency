@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\TravelAgencyApplication.Web.props" />
+</Project>
