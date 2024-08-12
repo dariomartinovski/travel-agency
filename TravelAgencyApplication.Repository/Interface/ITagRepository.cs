@@ -11,7 +11,8 @@ namespace TravelAgencyApplication.Repository.Interface
     public interface ITagRepository
     {
         IEnumerable<Tag> GetAll();
-        Tag Get(Guid id);
+        IEnumerable<Tag> GetAllTagsByIds(List<Guid> tags);
+        Tag Get(Guid? id);
         void Insert(Tag entity);
         void Update(Tag entity);
         void Delete(Tag entity);

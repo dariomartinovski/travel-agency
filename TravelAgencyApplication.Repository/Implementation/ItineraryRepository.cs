@@ -10,37 +10,41 @@ using TravelAgencyApplication.Web.Data;
 
 namespace TravelAgencyApplication.Repository.Implementation
 {
-    public class DepartureLocationRepository : IDepartureLocationRepository
+    public class ItineraryRepository : IItineraryRepository
     {
         private readonly ApplicationDbContext context;
-        private DbSet<DepartureLocation> entities;
+        private DbSet<Itinerary> entities;
         string errorMessage = string.Empty;
 
-        public DepartureLocationRepository(ApplicationDbContext context)
+        public ItineraryRepository(ApplicationDbContext context)
         {
             this.context = context;
-            entities = context.Set<DepartureLocation>();
+            entities = context.Set<Itinerary>();
         }
-
-        public IEnumerable<DepartureLocation> GetAll()
-        {
-            return entities.Include(t => t.City).ToList();
-        }
-        public IEnumerable<DepartureLocation> GetAllDepartureLocationsByIds(List<Guid> ids)
+        public IEnumerable<Itinerary> GetAll()
         {
             return entities
-                .Include(t => t.City)
-                .Where(it => ids.Contains(it.Id))
+                .Include(t => t.Destination)
+                .Include(t => t.TravelPackages)
+                .ToList();
+        }
+        public IEnumerable<Itinerary> GetAllItinerariesByIds(List<Guid> iteneraries)
+        {
+            return entities
+                .Include(t => t.Destination)
+                .Include(t => t.TravelPackages)
+                .Where(t => iteneraries.Contains(t.Id))
                 .ToList();
         }
 
-        public DepartureLocation Get(Guid? id)
+        public Itinerary Get(Guid? id)
         {
             return entities
-                .Include(t => t.City)
+                .Include(t => t.Destination)
+                .Include(t => t.TravelPackages)
                 .SingleOrDefault(s => s.Id == id);
         }
-        public void Insert(DepartureLocation entity)
+        public void Insert(Itinerary entity)
         {
             if (entity == null)
             {
@@ -50,7 +54,7 @@ namespace TravelAgencyApplication.Repository.Implementation
             context.SaveChanges();
         }
 
-        public void Update(DepartureLocation entity)
+        public void Update(Itinerary entity)
         {
             if (entity == null)
             {
@@ -60,7 +64,7 @@ namespace TravelAgencyApplication.Repository.Implementation
             context.SaveChanges();
         }
 
-        public void Delete(DepartureLocation entity)
+        public void Delete(Itinerary entity)
         {
             if (entity == null)
             {

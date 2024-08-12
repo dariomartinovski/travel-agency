@@ -13,6 +13,6 @@ namespace TravelAgencyApplication.Service.Interface
         TravelPackage GetDetailsForTravelPackage(Guid? id);
         void CreateNewTravelPackage(TravelPackage p);
         void UpdateExistingTravelPackage(TravelPackage p);
-        void DeleteTravelPackage(Guid id);
+        void DeleteTravelPackage(Guid? id);
     }
 }

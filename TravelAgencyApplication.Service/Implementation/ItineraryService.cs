@@ -11,9 +11,9 @@ namespace TravelAgencyApplication.Service.Implementation
 {
     public class ItineraryService : IItineraryService
     {
-        private readonly IRepository<Itinerary> _itineraryRepository;
+        private readonly IItineraryRepository _itineraryRepository;
 
-        public ItineraryService(IRepository<Itinerary> itineraryRepository)
+        public ItineraryService(IItineraryRepository itineraryRepository)
         {
             _itineraryRepository = itineraryRepository;
         }
@@ -32,9 +32,14 @@ namespace TravelAgencyApplication.Service.Implementation
             }
         }
 
-        public List<Itinerary> GetAllItinerarys()
+        public List<Itinerary> GetAllItineraries()
         {
             return _itineraryRepository.GetAll().ToList();
+        }
+        
+        public List<Itinerary> GetAllItinerariesByIds(List<Guid> iteneraries)
+        {
+            return _itineraryRepository.GetAllItinerariesByIds(iteneraries).ToList();
         }
 
         public Itinerary GetDetailsForItinerary(Guid? id)

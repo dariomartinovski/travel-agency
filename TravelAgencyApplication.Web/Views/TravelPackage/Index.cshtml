@@ -1,0 +1,39 @@
+﻿@model List<TravelAgencyApplication.Domain.Model.TravelPackage>
+
+@{
+    ViewData["Title"] = "Travel Packages";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var package in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@package.Title</h5>
+                        <p class="card-text">@package.Details</p>
+                        <p class="card-text"><strong>Base Price:</strong> @package.BasePrice</p>
+                        <p class="card-text"><strong>Departure Date:</strong> @package.DepartureDate.ToShortDateString()</p>
+                        <p class="card-text"><strong>Return Date:</strong> @package.ReturnDate.ToShortDateString()</p>
+                        <p class="card-text"><strong>Destination:</strong> @package.Destination.ToString()</p>
+                        <p class="card-text"><strong>Max Capacity:</strong> @package.MaxCapacity</p>
+                        <p class="card-text"><strong>Current Capacity:</strong> @package.CurrentCapacity</p>
+                        <p class="card-text"><strong>Season:</strong> @package.Season</p>
+                        <p class="card-text"><strong>Transport Type:</strong> @package.TransportType</p>
+
+                        <a href="@Url.Action("Details", "TravelPackage", new { id = package.Id })" class="btn btn-primary">Details</a>
+                        <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-secondary">Edit</a>
+
+                        <form asp-action="Delete" asp-route-id="@package.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

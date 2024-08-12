@@ -21,10 +21,11 @@ namespace TravelAgencyApplication.Service.Implementation
 
         public void CreateNewTravelPackage(TravelPackage p)
         {
+            
             _travelPackageRepository.Insert(p);
         }
 
-        public void DeleteTravelPackage(Guid id)
+        public void DeleteTravelPackage(Guid? id)
         {
             var travelPackage = _travelPackageRepository.Get(id);
             _travelPackageRepository.Delete(travelPackage);

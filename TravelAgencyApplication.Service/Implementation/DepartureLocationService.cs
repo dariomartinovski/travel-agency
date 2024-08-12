@@ -34,6 +34,10 @@ namespace TravelAgencyApplication.Service.Implementation
         {
             return _departureLocationRepository.GetAll().ToList();
         }
+        public List<DepartureLocation> GetAllDepartureLocationsByIds(List<Guid> ids)
+        {
+            return _departureLocationRepository.GetAllDepartureLocationsByIds(ids).ToList();
+        }
 
         public DepartureLocation GetDetailsForDepartureLocation(Guid? id)
         {

@@ -26,8 +26,15 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities.Include(t => t.TravelPackages).ToList();
         }
+        
+        public IEnumerable<Tag> GetAllTagsByIds(List<Guid> tags)
+        {
+            return entities.Include(t => t.TravelPackages)
+                .Where(t => tags.Contains(t.Id))
+                .ToList();
+        }
 
-        public Tag Get(Guid id)
+        public Tag Get(Guid? id)
         {
             return entities
                 .Include(t => t.TravelPackages)

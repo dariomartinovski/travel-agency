@@ -13,5 +13,10 @@ namespace TravelAgencyApplication.Domain.Model
         public Guid CityId { get; set; }
         public string? Location { get; set; }
         public TimeOnly DepartureTime { get; set; }
+
+        public override string ToString()
+        {
+            return $"{City?.Name ?? "Unknown City"}, {Location ?? "Unknown Location"} at {DepartureTime:hh\\:mm tt}";
+        }
     }
 }

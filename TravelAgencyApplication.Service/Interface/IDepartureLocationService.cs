@@ -10,6 +10,7 @@ namespace TravelAgencyApplication.Service.Interface
     public interface IDepartureLocationService
     {
         List<DepartureLocation> GetAllDepartureLocations();
+        List<DepartureLocation> GetAllDepartureLocationsByIds(List<Guid> ids);
         DepartureLocation GetDetailsForDepartureLocation(Guid? id);
         void CreateNewDepartureLocation(DepartureLocation p);
         void UpdateExistingDepartureLocation(DepartureLocation p);
