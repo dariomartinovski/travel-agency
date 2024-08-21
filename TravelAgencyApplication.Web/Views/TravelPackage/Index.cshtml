@@ -1,39 +1,49 @@
-﻿@model List<TravelAgencyApplication.Domain.Model.TravelPackage>
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.TravelPackage>
 
 @{
     ViewData["Title"] = "Travel Packages";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h1>@ViewData["Title"]</h1>
 
-<div class="container">
-    <div class="row">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Details</th>
+            <th>Base Price</th>
+            <th>Departure Date</th>
+            <th>Return Date</th>
+            <th>Destination</th>
+            <th>Max Capacity</th>
+            <th>Current Capacity</th>
+            <th>Season</th>
+            <th>Transport Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var package in Model)
         {
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">@package.Title</h5>
-                        <p class="card-text">@package.Details</p>
-                        <p class="card-text"><strong>Base Price:</strong> @package.BasePrice</p>
-                        <p class="card-text"><strong>Departure Date:</strong> @package.DepartureDate.ToShortDateString()</p>
-                        <p class="card-text"><strong>Return Date:</strong> @package.ReturnDate.ToShortDateString()</p>
-                        <p class="card-text"><strong>Destination:</strong> @package.Destination.ToString()</p>
-                        <p class="card-text"><strong>Max Capacity:</strong> @package.MaxCapacity</p>
-                        <p class="card-text"><strong>Current Capacity:</strong> @package.CurrentCapacity</p>
-                        <p class="card-text"><strong>Season:</strong> @package.Season</p>
-                        <p class="card-text"><strong>Transport Type:</strong> @package.TransportType</p>
-
-                        <a href="@Url.Action("Details", "TravelPackage", new { id = package.Id })" class="btn btn-primary">Details</a>
-                        <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-secondary">Edit</a>
-
-                        <form asp-action="Delete" asp-route-id="@package.Id" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                            @Html.AntiForgeryToken()
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>@package.Title</td>
+                <td>@package.Details</td>
+                <td>@package.BasePrice.ToString("C")</td>
+                <td>@package.DepartureDate.ToShortDateString()</td>
+                <td>@package.ReturnDate.ToShortDateString()</td>
+                <td>@package.Destination?.ToString()</td>
+                <td>@package.MaxCapacity</td>
+                <td>@package.CurrentCapacity</td>
+                <td>@package.Season</td>
+                <td>@package.TransportType</td>
+                <td>
+                    <a href="@Url.Action("Details", "TravelPackage", new { id = package.Id })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", "TravelPackage", new { id = package.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
         }
-    </div>
-</div>
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "TravelPackage")" class="btn btn-primary">Create New Travel Package</a>

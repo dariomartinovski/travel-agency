@@ -1,0 +1,37 @@
+﻿@model TravelAgencyApplication.Domain.Model.TravelPackage
+
+@{
+    ViewData["Title"] = "Travel Package Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Details</dt>
+        <dd class="col-sm-10">@Model.Details</dd>
+        <dt class="col-sm-2">Base Price</dt>
+        <dd class="col-sm-10">@Model.BasePrice</dd>
+        <dt class="col-sm-2">Departure Date</dt>
+        <dd class="col-sm-10">@Model.DepartureDate.ToShortDateString()</dd>
+        <dt class="col-sm-2">Return Date</dt>
+        <dd class="col-sm-10">@Model.ReturnDate.ToShortDateString()</dd>
+        <dt class="col-sm-2">Destination</dt>
+        <dd class="col-sm-10">@Model.Destination</dd>
+        <dt class="col-sm-2">Max Capacity</dt>
+        <dd class="col-sm-10">@Model.MaxCapacity</dd>
+        <dt class="col-sm-2">Current Capacity</dt>
+        <dd class="col-sm-10">@Model.CurrentCapacity</dd>
+        <dt class="col-sm-2">Season</dt>
+        <dd class="col-sm-10">@Model.Season</dd>
+        <dt class="col-sm-2">Transport Type</dt>
+        <dd class="col-sm-10">@Model.TransportType</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

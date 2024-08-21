@@ -36,7 +36,7 @@ namespace TravelAgencyApplication.Web.Controllers
         public IActionResult Index()
         {
             var travelPackages = _travelPackageService.GetAllTravelPackages();
-            return View(travelPackages); ;
+            return View(travelPackages);
            
         }
         public async Task<IActionResult> Details(Guid? id)
@@ -63,7 +63,6 @@ namespace TravelAgencyApplication.Web.Controllers
             ViewBag.DepartureLocationList = new SelectList(_departureLocationService.GetAllDepartureLocations(), "Id", null);
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,102 +111,133 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(travelPackageDto);
         }
 
-        //public IActionResult AddToCart(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: TravelPackage/Edit/5
+        public IActionResult Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var product = _productService.GetDetailsForProduct(id);
+            var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
+            if (travelPackage == null)
+            {
+                return NotFound();
+            }
 
-        //    ProductInShoppingCart ps = new ProductInShoppingCart();
+            ViewBag.DestinationList = new SelectList(_destinationService.GetAllDestinations(), "Id", null, travelPackage.DestinationId);
+            ViewBag.UserList = new SelectList(_userService.GetAllTAUsers(), "Id", "FirstName", travelPackage.UserId);
+            ViewBag.TagList = new MultiSelectList(_tagService.GetAllTags(), "Id", "Name", travelPackage.Tags.Select(t => t.Id));
+            ViewBag.ItineraryList = new MultiSelectList(_itineraryService.GetAllItineraries(), "Id", "Title", travelPackage.Itineraries.Select(i => i.ItineraryId));
+            ViewBag.DepartureLocationList = new MultiSelectList(_departureLocationService.GetAllDepartureLocations(), "Id", null, travelPackage.DepartureLocations.Select(dl => dl.Id));
 
-        //    if (product != null)
-        //    {
-        //        ps.ProductId = product.Id;
-        //    }
+            var travelPackageDto = new TravelPackageDTO
+            {
+                Id = travelPackage.Id,
+                Title = travelPackage.Title,
+                Details = travelPackage.Details,
+                BasePrice = travelPackage.BasePrice,
+                DepartureDate = travelPackage.DepartureDate,
+                ReturnDate = travelPackage.ReturnDate,
+                DestinationId = travelPackage.DestinationId,
+                MaxCapacity = travelPackage.MaxCapacity,
+                Season = travelPackage.Season,
+                UserId = travelPackage.UserId,
+                TransportType = travelPackage.TransportType,
+                Tags = travelPackage.Tags.Select(t => t.Id).ToList(),
+                Itineraries = travelPackage.Itineraries.Select(i => i.ItineraryId).ToList(),
+                DepartureLocations = travelPackage.DepartureLocations.Select(dl => dl.Id).ToList()
+            };
 
-        //    return View(ps);
-        //}
-
-        //[HttpPost]
-        //public IActionResult AddToCartConfirmed(ProductInShoppingCart model)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    _shoppingCartService.AddToShoppingConfirmed(model, userId);
+            return View(travelPackageDto);
+        }
 
 
-
-        //    return View("Index", _productService.GetAllProducts());
-        //}
-
-
-        //// GET: Products/Edit/5
-        //public IActionResult Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var product = _productService.GetDetailsForProduct(id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(product);
-        //}
-
-        //// POST: Products/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit(Guid id, [Bind("Id,ProductName,ProductDescription,ProductImage,Price,Rating")] Product product)
-        //{
-        //    if (id != product.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _productService.UpdateExistingProduct(product);
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            throw;
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(product);
-        //}
-    
-        [HttpPost, ActionName("Delete")]
+        // POST: TravelPackage/Edit/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult Edit(Guid id, [Bind("Id, Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
+        {
+            if (id != travelPackageDto.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
+
+                    var travelPackage = new TravelPackage
+                    {
+                        Id = travelPackageDto.Id,
+                        Title = travelPackageDto.Title,
+                        Details = travelPackageDto.Details,
+                        BasePrice = travelPackageDto.BasePrice,
+                        DepartureDate = travelPackageDto.DepartureDate,
+                        ReturnDate = travelPackageDto.ReturnDate,
+                        DestinationId = travelPackageDto.DestinationId,
+                        MaxCapacity = travelPackageDto.MaxCapacity,
+                        Season = travelPackageDto.Season,
+                        UserId = travelPackageDto.UserId,
+                        TransportType = travelPackageDto.TransportType,
+                        Tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags),
+                        Itineraries = _travelPackageItineraryService.GetAllTravelPackageItinerariesByIds(travelPackageDto.Itineraries),
+                        DepartureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations)
+                    };
+
+                    _travelPackageService.UpdateExistingTravelPackage(travelPackage);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(travelPackageDto);
+        }
+
+        // GET: TravelPackage/Delete/5
         public IActionResult Delete(Guid? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
+            if (travelPackage == null)
+            {
+                return NotFound();
+            }
+
+            return View(travelPackage);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(Guid? id)
+        {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId != null && id != null)
+            if (userId != null && id != null)
             {
                 var user = _userService.GetDetailsForTAUser(userId);
                 if (user.UserRole == Domain.Enum.UserRole.ADMIN)
                 {
-                    
-                    _travelPackageService.DeleteTravelPackage(id);
-                    return RedirectToAction("Index");
+                    var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
+                    if (travelPackage != null)
+                    {
+                        _travelPackageService.DeleteTravelPackage(id);
+                    }
+
+                    return RedirectToAction(nameof(Index));;
                 }
             }
-            
-            return Unauthorized();
+            return RedirectToAction(nameof(Index)); ;
+
+            //return Unauthorized();
         }
 
-
-       
-
-    
-}
+    }
 }

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Itinerary>
+
+<h1>Itineraries</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Details</th>
+            <th>Price</th>
+            <th>Date</th>
+            <th>Destination</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var itinerary in Model)
+        {
+            <tr>
+                <td>@itinerary.Title</td>
+                <td>@itinerary.Details</td>
+                <td>@itinerary.Price</td>
+                <td>@itinerary.Date.ToShortDateString()</td>
+                <td>@itinerary.Destination?.ToString()</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = itinerary.Id })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Edit", new { id = itinerary.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = itinerary.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create")" class="btn btn-primary">Create New Itinerary</a>

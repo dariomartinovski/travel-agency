@@ -26,14 +26,19 @@ namespace TravelAgencyApplication.Repository.Implementation
             return entities.Include(t=>t.Itineraries)
                 .Include(t=>t.DepartureLocations)
                 .Include(t=>t.Destination)
+                .Include(t => t.Destination.Country)
+                .Include(t => t.Destination.City)
                 .Include(t=>t.Guide).ToList();
         }
 
         public TravelPackage Get(Guid? id)
         {
             return entities
+                //.AsNoTracking
                 .Include(t => t.DepartureLocations)
                 .Include(t => t.Destination)
+                .Include(t => t.Destination.Country)
+                .Include(t => t.Destination.City)
                 .Include(t => t.Guide)
                 .SingleOrDefault(s => s.Id == id);
         }
@@ -51,11 +56,21 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
-            entities.Update(entity);
+
+            var existingEntity = context.TravelPackages.Local.SingleOrDefault(e => e.Id == entity.Id);
+            if (existingEntity != null)
+            {
+                context.Entry(existingEntity).State = EntityState.Detached;
+            }
+
+            entities.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+
             context.SaveChanges();
         }
+
 
         public void Delete(TravelPackage entity)
         {

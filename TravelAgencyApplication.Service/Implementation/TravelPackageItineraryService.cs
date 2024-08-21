@@ -37,6 +37,12 @@ namespace TravelAgencyApplication.Service.Implementation
             return _travelPackageRepository.GetAll().ToList();
         }
 
+        public List<TravelPackageItinerary> GetAllTravelPackageItinerariesByIds(List<Guid> ids)
+        {
+            return _travelPackageRepository.GetAll().Where(i => ids.Contains(i.Id)).ToList();
+        }
+
+
         public TravelPackageItinerary GetDetailsForTravelPackageItinerary(Guid? id)
         {
             return _travelPackageRepository.Get(id);

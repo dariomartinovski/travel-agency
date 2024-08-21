@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Repository.Data;
 
 namespace TravelAgencyApplication.Web.Data
 {
@@ -16,9 +17,6 @@ namespace TravelAgencyApplication.Web.Data
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<DepartureLocation> DeparatureLocations { get; set; }
         public virtual DbSet<Destination> Destinations { get; set; }
-
-
-
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -40,6 +38,14 @@ namespace TravelAgencyApplication.Web.Data
                 .HasForeignKey(tpi => tpi.ItineraryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<TravelPackage>()
+                .HasMany(tp => tp.Itineraries)
+                .WithOne(tpi => tpi.TravelPackage)
+                .HasForeignKey(tpi => tpi.TravelPackageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            DataInitializer.SeedData(modelBuilder);
         }
-}
+    }
 }

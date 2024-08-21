@@ -25,6 +25,8 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities
                 .Include(t => t.Destination)
+                .Include(t => t.Destination.Country)
+                .Include(t => t.Destination.City)
                 .Include(t => t.TravelPackages)
                 .ToList();
         }
@@ -32,6 +34,8 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities
                 .Include(t => t.Destination)
+                .Include(t => t.Destination.Country)
+                .Include(t => t.Destination.City)
                 .Include(t => t.TravelPackages)
                 .Where(t => iteneraries.Contains(t.Id))
                 .ToList();
@@ -41,6 +45,8 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities
                 .Include(t => t.Destination)
+                .Include(t => t.Destination.Country)
+                .Include(t => t.Destination.City)
                 .Include(t => t.TravelPackages)
                 .SingleOrDefault(s => s.Id == id);
         }

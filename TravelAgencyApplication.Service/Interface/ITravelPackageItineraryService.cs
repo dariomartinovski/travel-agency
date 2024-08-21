@@ -10,6 +10,7 @@ namespace TravelAgencyApplication.Service.Interface
     public interface ITravelPackageItineraryService
     {
         List<TravelPackageItinerary> GetAllTravelPackageItinerarys();
+        List<TravelPackageItinerary> GetAllTravelPackageItinerariesByIds(List<Guid> ids);
         TravelPackageItinerary GetDetailsForTravelPackageItinerary(Guid? id);
         void CreateNewTravelPackageItinerary(TravelPackageItinerary p);
         void UpdateExistingTravelPackageItinerary(TravelPackageItinerary p);

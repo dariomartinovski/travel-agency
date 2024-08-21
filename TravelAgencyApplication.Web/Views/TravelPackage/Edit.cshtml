@@ -1,0 +1,122 @@
+﻿@model TravelAgencyApplication.Domain.DTO.TravelPackageDTO
+
+@{
+    ViewData["Title"] = "Edit Travel Package";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Details" class="control-label"></label>
+        <textarea asp-for="Details" class="form-control"></textarea>
+        <span asp-validation-for="Details" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BasePrice" class="control-label"></label>
+        <input asp-for="BasePrice" class="form-control" />
+        <span asp-validation-for="BasePrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DepartureDate" class="control-label"></label>
+        <input asp-for="DepartureDate" class="form-control" type="date" />
+        <span asp-validation-for="DepartureDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReturnDate" class="control-label"></label>
+        <input asp-for="ReturnDate" class="form-control" type="date" />
+        <span asp-validation-for="ReturnDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DestinationId" class="control-label"></label>
+        <select asp-for="DestinationId" class="form-control" asp-items="ViewBag.DestinationList"></select>
+        <span asp-validation-for="DestinationId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DestinationId" class="control-label"></label>
+        <select asp-for="DestinationId" class="form-control" asp-items="ViewBag.DestinationList"></select>
+        <span asp-validation-for="DestinationId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MaxCapacity" class="control-label"></label>
+        <input asp-for="MaxCapacity" class="form-control" />
+        <span asp-validation-for="MaxCapacity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Season" class="control-label"></label>
+        <select asp-for="Season" class="form-control">
+            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SPRING)">Spring</option>
+            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER)">Summer</option>
+            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN)">Fall</option>
+            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER)">Winter</option>
+
+        </select>
+        <span asp-validation-for="Season" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserId" class="control-label"></label>
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserList"></select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TransportType" class="control-label"></label>
+        <select asp-for="TransportType" class="form-control">
+            <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE)">Airplane</option>
+            <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS)">Bus</option>
+            <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT)">Ship</option>
+        </select>
+        <span asp-validation-for="TransportType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Tags" class="control-label"></label>
+        <select asp-for="Tags" class="form-control" asp-items="ViewBag.TagList" multiple></select>
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Itineraries" class="control-label"></label>
+        <select asp-for="Itineraries" class="form-control" asp-items="ViewBag.ItineraryList" multiple></select>
+        <span asp-validation-for="Itineraries" class="text-danger"></span>
+    </div>
+
+     <div class="form-group">
+        <label asp-for="DepartureLocations" class="control-label"></label>
+        <select asp-for="DepartureLocations" class="form-control" asp-items="ViewBag.DepartureLocationList" multiple></select>
+        <span asp-validation-for="DepartureLocations" class="text-danger"></span>
+    </div> 
+
+    <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
