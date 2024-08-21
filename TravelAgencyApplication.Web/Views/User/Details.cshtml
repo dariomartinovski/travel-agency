@@ -1,0 +1,75 @@
+﻿@model TravelAgencyApplication.Domain.Identity.TAUser
+<h1>Details</h1>
+
+<div>
+          <h4>User</h4>
+      <hr />
+      <dl class="row">
+          <dt class="col-sm-2">
+              @Html.DisplayNameFor(model => model.FirstName)
+          </dt>
+          <dd class="col-sm-10">
+              @Html.DisplayFor(model => model.LastName)
+          </dd>
+          <dt class="col-sm-2">
+              @Html.DisplayNameFor(model => model.PhoneNumber)
+          </dt>
+
+      </dl>
+    <div class="row">
+        @if (Model.Reservations?.Where(d => d.Date.CompareTo(DateTime.Now) > 0).Count() > 0)
+        {
+            <h4>Future Reservations</h4>
+            var reservations = Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) > 0).ToList();
+            @foreach (var reservation in reservations)
+            {
+
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => reservation.Date)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => reservation.TotalPrice)
+                    </td>
+                    <td>
+                        @if(reservation.HasPaid)
+                        {
+                            <span>Has Paid</span>
+                        }
+                        else {
+                        <span>Not paid</span>
+
+                        }
+                    </td>
+
+                </tr>
+            }
+        }
+    </div>
+
+    <div class="row">
+        @if (Model?.Reservations?.Where(d => d.Date.CompareTo(DateTime.Now) <= 0).Count() > 0)
+        {
+            <h4>Past Reservations</h4>
+            var reservations = Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) <= 0).ToList();
+            @foreach (var reservation in reservations)
+            {
+
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => reservation.Date)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => reservation.TotalPrice)
+                    </td>
+
+                </tr>
+            }
+        }
+    </div>
+
+
