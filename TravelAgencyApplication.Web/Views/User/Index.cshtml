@@ -36,5 +36,8 @@
         }
     </tbody>
 </table>
+@if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
+{
 
-<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create User</a>
+    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary"> Register</a>
+}
