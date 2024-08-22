@@ -1,40 +1,40 @@
 ﻿@model TravelAgencyApplication.Domain.ViewModel.TAUserIndexViewModel
-<h1>Index</h1>
-<div class="container">
+@{
+    ViewData["Title"] = "User Index";
+}
 
-    @for(int i=0;i<Model.Users.Count; i++)
-    {
-        var item = Model.Users.ElementAt(i);
-        if(i % 3 == 0)
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Phone Number</th>
+            <th>Employee Type</th>
+            @if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
         {
-            @:<div class="row">
-        }
-        <div class="col-3 m-4">
-
-            <div class="card" style="width: 18rem; height: 35rem">
-                <div class="card-body">
-                    <h5 class="card-title">Full Name: @item.FirstName @item.LastName</h5>
-                    <p class="card-text"> Phone Number: @item.PhoneNumber</p>
-                    <p class="card-text"> Employee Type: @item.UserRole</p>
-                </div>
-                <div class="card-footer">
-                       @if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN )
-                    {
+            <tr>
+                <td>@item.FirstName @item.LastName</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.UserRole</td>
+                @if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
+                {
+                    <td>
                         <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
-                         <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
-                                   <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-
-                    }
-                    
-                </div>
-
-            </div>
-        </div>
-
-        if(i % 3 == 2)
-        {
-            @:</div>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                        <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                }
+            </tr>
         }
-    }
-</div>
+    </tbody>
+</table>
 
+<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create User</a>

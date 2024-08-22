@@ -100,8 +100,10 @@ namespace TravelAgencyApplication.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            
             return View(user);
         }
+
 
         // GET: TAUsers/Delete/5
         public IActionResult Delete(string? id)
@@ -132,8 +134,6 @@ namespace TravelAgencyApplication.Web.Controllers
             _userService.DeleteTAUser(id);
             return RedirectToAction(nameof(Index));
         }
-
-
-
+   
     }
 }

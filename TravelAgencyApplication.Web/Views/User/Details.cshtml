@@ -1,75 +1,81 @@
 ﻿@model TravelAgencyApplication.Domain.Identity.TAUser
-<h1>Details</h1>
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2>@ViewData["Title"]</h2>
 
 <div>
-          <h4>User</h4>
-      <hr />
-      <dl class="row">
-          <dt class="col-sm-2">
-              @Html.DisplayNameFor(model => model.FirstName)
-          </dt>
-          <dd class="col-sm-10">
-              @Html.DisplayFor(model => model.LastName)
-          </dd>
-          <dt class="col-sm-2">
-              @Html.DisplayNameFor(model => model.PhoneNumber)
-          </dt>
+    <h4>@Model.FirstName @Model.LastName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Phone Number</dt>
+        <dd class="col-sm-10">@Model.PhoneNumber</dd>
+    </dl>
+</div>
 
-      </dl>
-    <div class="row">
-        @if (Model.Reservations?.Where(d => d.Date.CompareTo(DateTime.Now) > 0).Count() > 0)
-        {
-            <h4>Future Reservations</h4>
-            var reservations = Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) > 0).ToList();
-            @foreach (var reservation in reservations)
-            {
-
+@if (Model.Reservations?.Any(d => d.Date.CompareTo(DateTime.Now) > 0) == true)
+{
+    <div>
+        <h4>Future Reservations</h4>
+        <hr />
+        <table class="table">
+            <thead>
                 <tr>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => reservation.Date)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => reservation.TotalPrice)
-                    </td>
-                    <td>
-                        @if(reservation.HasPaid)
-                        {
-                            <span>Has Paid</span>
-                        }
-                        else {
-                        <span>Not paid</span>
-
-                        }
-                    </td>
-
+                    <th>Date</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
                 </tr>
-            }
-        }
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) > 0))
+                {
+                    <tr>
+                        <td>@reservation.Date.ToShortDateString()</td>
+                        <td>@reservation.TotalPrice.ToString("C")</td>
+                        <td>
+                            @if (reservation.HasPaid)
+                            {
+                                <span>Has Paid</span>
+                            }
+                            else
+                            {
+                                <span>Not Paid</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+}
 
-    <div class="row">
-        @if (Model?.Reservations?.Where(d => d.Date.CompareTo(DateTime.Now) <= 0).Count() > 0)
-        {
-            <h4>Past Reservations</h4>
-            var reservations = Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) <= 0).ToList();
-            @foreach (var reservation in reservations)
-            {
-
+@if (Model.Reservations?.Any(d => d.Date.CompareTo(DateTime.Now) <= 0) == true)
+{
+    <div>
+        <h4>Past Reservations</h4>
+        <hr />
+        <table class="table">
+            <thead>
                 <tr>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => reservation.Date)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => reservation.TotalPrice)
-                    </td>
-
+                    <th>Date</th>
+                    <th>Total Price</th>
                 </tr>
-            }
-        }
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) <= 0))
+                {
+                    <tr>
+                        <td>@reservation.Date.ToShortDateString()</td>
+                        <td>@reservation.TotalPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+}
 
-
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
