@@ -15,5 +15,6 @@ namespace TravelAgencyApplication.Repository.Interface
         void Insert(TAUser entity);
         void Update(TAUser entity);
         void Delete(TAUser entity);
+        public bool TAUserExists(string userId);
     }
 }

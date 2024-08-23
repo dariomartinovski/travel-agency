@@ -15,5 +15,6 @@ namespace TravelAgencyApplication.Service.Interface
         void CreateNewTAUser(TAUser p);
         void UpdateExistingTAUser(TAUser p);
         void DeleteTAUser(string id);
+        public bool TAUserExists(string userId);
     }
 }

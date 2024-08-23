@@ -44,5 +44,9 @@ namespace TravelAgencyApplication.Service.Implementation
         {
             _userRepository.Update(p);
         }
+        public bool TAUserExists(string userId)
+        {
+            return _userRepository.TAUserExists(userId);
+        }
     }
 }
