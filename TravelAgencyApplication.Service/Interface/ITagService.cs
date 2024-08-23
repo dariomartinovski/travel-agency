@@ -11,8 +11,9 @@ namespace TravelAgencyApplication.Service.Interface
     {
         List<Tag> GetAllTags();
         Tag GetDetailsForTag(Guid? id);
-
         List<Tag> GetAllTagsByIds(List<Guid> tagIds);
-       
+        void CreateNewTag(Tag p);
+        void UpdateExistingTag(Tag p);
+        void DeleteTag(Guid id);
     }
 }

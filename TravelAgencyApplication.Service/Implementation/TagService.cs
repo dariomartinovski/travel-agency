@@ -32,5 +32,24 @@ namespace TravelAgencyApplication.Service.Implementation
         {
             return _tagRepository.Get(id);
         }
+
+        public void CreateNewTag(Tag p)
+        {
+            _tagRepository.Insert(p);
+        }
+
+        public void DeleteTag(Guid id)
+        {
+            var tag = _tagRepository.Get(id);
+            if (tag != null)
+            {
+                _tagRepository.Delete(tag);
+            }
+        }
+
+        public void UpdateExistingTag(Tag p)
+        {
+            _tagRepository.Update(p);
+        }
     }
 }

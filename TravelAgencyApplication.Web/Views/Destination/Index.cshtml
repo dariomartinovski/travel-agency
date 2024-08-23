@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Destination>
+
+@{
+    ViewData["Title"] = "Destinations";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>City</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var destination in Model)
+        {
+            <tr>
+                <td>@destination.City?.Name</td>
+                <td>@destination.Country?.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Destination", new { id = destination.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", "Destination", new { id = destination.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "Destination")" class="btn btn-primary">Create New Destination</a>

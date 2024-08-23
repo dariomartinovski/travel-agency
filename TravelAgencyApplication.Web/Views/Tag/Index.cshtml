@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Tag>
+
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in Model)
+        {
+            <tr>
+                <td>@tag.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Tag", new { id = tag.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", "Tag", new { id = tag.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "Tag")" class="btn btn-primary">Create New Tag</a>
