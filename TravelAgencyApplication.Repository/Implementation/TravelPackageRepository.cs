@@ -40,6 +40,8 @@ namespace TravelAgencyApplication.Repository.Implementation
                 .Include(t => t.Destination.Country)
                 .Include(t => t.Destination.City)
                 .Include(t => t.Guide)
+                .Include(t => t.Itineraries)
+                .Include("Itineraries.Itinerary")
                 .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(TravelPackage entity)
@@ -70,7 +72,6 @@ namespace TravelAgencyApplication.Repository.Implementation
 
             context.SaveChanges();
         }
-
 
         public void Delete(TravelPackage entity)
         {

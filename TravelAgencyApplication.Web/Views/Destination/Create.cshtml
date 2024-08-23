@@ -1,0 +1,22 @@
+﻿@model TravelAgencyApplication.Domain.Model.Destination
+
+@{
+    ViewData["Title"] = "Create Destination";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="CountryId" class="control-label"></label>
+        <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryList"></select>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CityId" class="control-label"></label>
+        <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityList"></select>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

@@ -52,5 +52,52 @@ namespace TravelAgencyApplication.Service.Implementation
         {
             _travelPackageRepository.Update(p);
         }
+
+        //public List<TravelPackageItinerary> UpdateTravelPackageItineraries(List<TravelPackageItinerary> existingItineraries, List<TravelPackageItinerary> newItineraries)
+        //{
+        //    // 1 2 3   -  1 4  - Maybe another day
+        //    //List<TravelPackageItinerary> itinerariesToAdd = newItineraries.Where(i => !existingItineraries.Select(it => it.ItineraryId).Contains(i.ItineraryId)).ToList();
+        //    //List<TravelPackageItinerary> itinerariesToDelete = existingItineraries.Where(e => !newItineraries.Select(i => i.ItineraryId).Contains(e.ItineraryId)).ToList();
+
+        //    //itinerariesToDelete.ForEach(i =>_travelPackageRepository.Delete(i));
+        //    //itinerariesToAdd.ForEach(i => _travelPackageRepository.Insert(i));
+
+        //    existingItineraries.ForEach(i =>  _travelPackageRepository.Delete(i));
+        //    newItineraries.ForEach(i =>  _travelPackageRepository.Insert(i));
+        //    return newItineraries;
+        //}
+        public List<TravelPackageItinerary> UpdateTravelPackageItineraries(List<TravelPackageItinerary> existingItineraries, List<TravelPackageItinerary> newItineraries)
+        {
+            
+            var itinerariesToDelete = existingItineraries
+                .Where(e => !newItineraries.Select(i => i.ItineraryId).Contains(e.ItineraryId))
+                .ToList();
+
+            // Find itineraries to add (new ones not in the existing list)
+            var itinerariesToAdd = newItineraries
+                .Where(n => !existingItineraries.Select(e => e.ItineraryId).Contains(n.ItineraryId))
+                .ToList();
+
+            foreach (var itinerary in itinerariesToDelete)
+            {
+                DeleteTravelPackageItinerary(itinerary.Id);
+                //_travelPackageRepository.Delete(itinerary);
+            }
+
+            // Add new itineraries
+            foreach (var itinerary in itinerariesToAdd)
+            {
+                CreateNewTravelPackageItinerary(itinerary);
+                //_travelPackageRepository.Insert(itinerary);
+            }
+
+            // Return the updated list of itineraries
+            return existingItineraries
+                .Where(e => !itinerariesToDelete.Contains(e)) // Keep existing itineraries that are not deleted
+                .Concat(itinerariesToAdd) // Add new itineraries
+                .ToList();
+        }
+
+
     }
 }

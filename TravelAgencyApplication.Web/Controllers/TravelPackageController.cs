@@ -9,11 +9,14 @@ using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Domain.Model;
 using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
+using TravelAgencyApplication.Web.Data;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
     public class TravelPackageController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
         private readonly ITravelPackageService _travelPackageService;
         private readonly ITravelPackageItineraryService _travelPackageItineraryService;
         private readonly IUserService _userService;
@@ -22,7 +25,7 @@ namespace TravelAgencyApplication.Web.Controllers
         private readonly IDepartureLocationService _departureLocationService;
         private readonly ITagService _tagService;
 
-        public TravelPackageController(ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService)
+        public TravelPackageController(ApplicationDbContext application, ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService)
         {
             _travelPackageService = travelPackageService;
             _userService = userService;
@@ -31,6 +34,7 @@ namespace TravelAgencyApplication.Web.Controllers
             _destinationService = destinationService;
             _tagService = tagService;
             _travelPackageItineraryService = travelPackageItineraryService;
+            _context = application;
         }
 
         public IActionResult Index()
@@ -148,7 +152,7 @@ namespace TravelAgencyApplication.Web.Controllers
                 Itineraries = travelPackage.Itineraries.Select(i => i.ItineraryId).ToList(),
                 DepartureLocations = travelPackage.DepartureLocations.Select(dl => dl.Id).ToList()
             };
-
+            
             return View(travelPackageDto);
         }
 
@@ -167,27 +171,57 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 try
                 {
-                    List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
-
-                    var travelPackage = new TravelPackage
+                    TravelPackage package = _travelPackageService.GetDetailsForTravelPackage(id);
+                    if (package != null)
                     {
-                        Id = travelPackageDto.Id,
-                        Title = travelPackageDto.Title,
-                        Details = travelPackageDto.Details,
-                        BasePrice = travelPackageDto.BasePrice,
-                        DepartureDate = travelPackageDto.DepartureDate,
-                        ReturnDate = travelPackageDto.ReturnDate,
-                        DestinationId = travelPackageDto.DestinationId,
-                        MaxCapacity = travelPackageDto.MaxCapacity,
-                        Season = travelPackageDto.Season,
-                        UserId = travelPackageDto.UserId,
-                        TransportType = travelPackageDto.TransportType,
-                        Tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags),
-                        Itineraries = _travelPackageItineraryService.GetAllTravelPackageItinerariesByIds(travelPackageDto.Itineraries),
-                        DepartureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations)
-                    };
 
-                    _travelPackageService.UpdateExistingTravelPackage(travelPackage);
+                            Console.WriteLine("Before for");
+                        package.Itineraries.ToList().ForEach(i =>
+                        {
+                            Console.WriteLine("Trying to delete :" + i.Itinerary.Id.ToString());
+                            _travelPackageItineraryService.DeleteTravelPackageItinerary(i.Itinerary.Id);
+                        });
+
+                        _travelPackageService.UpdateExistingTravelPackage(package);
+
+                        //    List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
+
+                        //    List<TravelPackageItinerary> newTravelPackageItineraries = Itineraries.Select(x => new TravelPackageItinerary
+                        //    {
+                        //        Id = Guid.NewGuid(),
+                        //        TravelPackage = package,
+                        //        TravelPackageId = package.Id,
+                        //        Itinerary = x,
+                        //        ItineraryId = x.Id
+                        //    }).ToList();
+
+                        //    //package.Itineraries = _travelPackageItineraryService.UpdateTravelPackageItineraries(package.Itineraries.ToList(), newTravelPackageItineraries);
+
+                        //    newTravelPackageItineraries.ForEach(_travelPackageItineraryService.CreateNewTravelPackageItinerary);
+
+                        //    package.Itineraries = newTravelPackageItineraries;
+
+                        //    package.Title = travelPackageDto.Title;
+                        //    package.Details = travelPackageDto.Details;
+                        //    package.BasePrice = travelPackageDto.BasePrice;
+                        //    package.DepartureDate = travelPackageDto.DepartureDate;
+                        //    package.ReturnDate = travelPackageDto.ReturnDate;
+                        //    package.MaxCapacity = travelPackageDto.MaxCapacity;
+                        //    package.CurrentCapacity = travelPackageDto.MaxCapacity;
+                        //    package.DestinationId = travelPackageDto.DestinationId;
+                        //    package.Destination = _destinationService.GetDetailsForDestination(travelPackageDto.DestinationId);
+                        //    package.Season = travelPackageDto.Season;
+                        //    package.TransportType = travelPackageDto.TransportType;
+                        //    package.UserId = travelPackageDto.UserId;
+                        //    package.Guide = _userService.GetDetailsForTAUser(travelPackageDto.UserId);
+                        //    package.Tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags);
+
+                        //    package.DepartureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations);
+
+
+                        //    _travelPackageService.UpdateExistingTravelPackage(package);
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -198,21 +232,9 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(travelPackageDto);
         }
 
-        // GET: TravelPackage/Delete/5
-        public IActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
-            if (travelPackage == null)
-            {
-                return NotFound();
-            }
-
-            return View(travelPackage);
+        public IActionResult Test() {
+            _travelPackageItineraryService.DeleteTravelPackageItinerary(new Guid("951b372a-2260-48e3-8353-65670afc139f  "));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost, ActionName("Delete")]

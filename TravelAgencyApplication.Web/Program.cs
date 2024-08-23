@@ -36,6 +36,8 @@ builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITagService, TagService>();
 builder.Services.AddTransient<ITravelPackageItineraryService, TravelPackageItineraryService>();
+builder.Services.AddTransient<ICityService, CityService>();
+builder.Services.AddTransient<ICountryService, CountryService>();
 
 var app = builder.Build();
 
