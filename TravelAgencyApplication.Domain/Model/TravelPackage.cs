@@ -28,9 +28,9 @@ namespace TravelAgencyApplication.Domain.Model
     public int Views {  get; set; }
 
     public Season Season { get; set; }
-    public virtual List<Tag>? Tags { get; set; } = new List<Tag>();
+    public virtual ICollection<TravelPackageTag>? Tags { get; set; } = new List<TravelPackageTag>();
     public virtual ICollection<TravelPackageItinerary>? Itineraries { get; set; } = new List<TravelPackageItinerary>();
-    public virtual List<DepartureLocation>? DepartureLocations { get; set; } = new List<DepartureLocation>();
+    public virtual ICollection<TravelPackageDepartureLocation>? DepartureLocations { get; set; } = new List<TravelPackageDepartureLocation>();
     public string? UserId { get; set; }
     [ForeignKey(nameof(UserId))]
     public TAUser? Guide { get; set; }

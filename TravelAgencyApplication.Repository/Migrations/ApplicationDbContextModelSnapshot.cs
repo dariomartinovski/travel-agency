@@ -17,7 +17,7 @@ namespace TravelAgencyApplication.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -159,21 +159,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TagTravelPackage", b =>
-                {
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TravelPackagesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TagsId", "TravelPackagesId");
-
-                    b.HasIndex("TravelPackagesId");
-
-                    b.ToTable("TagTravelPackage");
-                });
-
             modelBuilder.Entity("TravelAgencyApplication.Domain.Identity.TAUser", b =>
                 {
                     b.Property<string>("Id")
@@ -291,14 +276,9 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TravelPackageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
-
-                    b.HasIndex("TravelPackageId");
 
                     b.ToTable("DeparatureLocations");
                 });
@@ -457,6 +437,27 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.ToTable("TravelPackages");
                 });
 
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageDepartureLocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DepartureLocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TravelPackageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartureLocationId");
+
+                    b.HasIndex("TravelPackageId");
+
+                    b.ToTable("TravelPackageDepartureLocation");
+                });
+
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageItinerary", b =>
                 {
                     b.Property<Guid>("Id")
@@ -476,6 +477,27 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasIndex("TravelPackageId");
 
                     b.ToTable("TravelPackageItinerary");
+                });
+
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TravelPackageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("TravelPackageId");
+
+                    b.ToTable("TravelPackageTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -529,21 +551,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TagTravelPackage", b =>
-                {
-                    b.HasOne("TravelAgencyApplication.Domain.Model.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", null)
-                        .WithMany()
-                        .HasForeignKey("TravelPackagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.DepartureLocation", b =>
                 {
                     b.HasOne("TravelAgencyApplication.Domain.Model.City", "City")
@@ -551,10 +558,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", null)
-                        .WithMany("DepartureLocations")
-                        .HasForeignKey("TravelPackageId");
 
                     b.Navigation("City");
                 });
@@ -625,6 +628,25 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Navigation("Guide");
                 });
 
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageDepartureLocation", b =>
+                {
+                    b.HasOne("TravelAgencyApplication.Domain.Model.DepartureLocation", "DepartureLocation")
+                        .WithMany("TravelPackages")
+                        .HasForeignKey("DepartureLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
+                        .WithMany("DepartureLocations")
+                        .HasForeignKey("TravelPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DepartureLocation");
+
+                    b.Navigation("TravelPackage");
+                });
+
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageItinerary", b =>
                 {
                     b.HasOne("TravelAgencyApplication.Domain.Model.Itinerary", "Itinerary")
@@ -636,10 +658,29 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
                         .WithMany("Itineraries")
                         .HasForeignKey("TravelPackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Itinerary");
+
+                    b.Navigation("TravelPackage");
+                });
+
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageTag", b =>
+                {
+                    b.HasOne("TravelAgencyApplication.Domain.Model.Tag", "Tag")
+                        .WithMany("TravelPackages")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
+                        .WithMany("Tags")
+                        .HasForeignKey("TravelPackageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
 
                     b.Navigation("TravelPackage");
                 });
@@ -649,7 +690,17 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Navigation("Reservations");
                 });
 
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.DepartureLocation", b =>
+                {
+                    b.Navigation("TravelPackages");
+                });
+
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Itinerary", b =>
+                {
+                    b.Navigation("TravelPackages");
+                });
+
+            modelBuilder.Entity("TravelAgencyApplication.Domain.Model.Tag", b =>
                 {
                     b.Navigation("TravelPackages");
                 });
@@ -659,6 +710,8 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.Navigation("DepartureLocations");
 
                     b.Navigation("Itineraries");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

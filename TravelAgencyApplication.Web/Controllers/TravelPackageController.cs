@@ -75,6 +75,8 @@ namespace TravelAgencyApplication.Web.Controllers
             if (ModelState.IsValid)
             {
                 List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
+                List<DepartureLocation> departureLocations= _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations);
+                List<Tag> tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags);
 
                 TravelPackage travelPackage = new TravelPackage
                 {
@@ -92,9 +94,9 @@ namespace TravelAgencyApplication.Web.Controllers
                     TransportType = travelPackageDto.TransportType,
                     UserId = travelPackageDto.UserId,
                     Guide = _userService.GetDetailsForTAUser(travelPackageDto.UserId),
-                    Tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags),
+                    Tags = new List<TravelPackageTag>(),
                     Itineraries = new List<TravelPackageItinerary>(),
-                    DepartureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations)
+                    DepartureLocations = new List<TravelPackageDepartureLocation>()
                 };
                 var travelPackageItineraries = new List<TravelPackageItinerary>();
                 Itineraries.ForEach(x => travelPackageItineraries.Add(new TravelPackageItinerary
@@ -106,8 +108,29 @@ namespace TravelAgencyApplication.Web.Controllers
                     ItineraryId = x.Id
                 }));
 
+                var travelPackageTags = new List<TravelPackageTag>();
+                tags.ForEach(t => travelPackageTags.Add(new TravelPackageTag
+                {
+                    Id = Guid.NewGuid(),
+                    TravelPackage = travelPackage,
+                    TravelPackageId = travelPackage.Id,
+                    Tag = t,
+                    TagId = t.Id
+                }));
+
+                var travelPackageDepartureLocations = new List<TravelPackageDepartureLocation>();
+                departureLocations.ForEach(dl => travelPackageDepartureLocations.Add(new TravelPackageDepartureLocation
+                {
+                    Id = Guid.NewGuid(),
+                    TravelPackage = travelPackage,
+                    TravelPackageId = travelPackage.Id,
+                    DepartureLocation = dl,
+                    DepartureLocationId = dl.Id
+                }));
 
                 travelPackage.Itineraries = travelPackageItineraries;
+                travelPackage.Tags = travelPackageTags;
+                travelPackage.DepartureLocations = travelPackageDepartureLocations;
 
                 _travelPackageService.CreateNewTravelPackage(travelPackage);
                 return RedirectToAction(nameof(Index));
@@ -131,9 +154,9 @@ namespace TravelAgencyApplication.Web.Controllers
 
             ViewBag.DestinationList = new SelectList(_destinationService.GetAllDestinations(), "Id", null, travelPackage.DestinationId);
             ViewBag.UserList = new SelectList(_userService.GetAllTAUsers(), "Id", "FirstName", travelPackage.UserId);
-            ViewBag.TagList = new MultiSelectList(_tagService.GetAllTags(), "Id", "Name", travelPackage.Tags.Select(t => t.Id));
+            ViewBag.TagList = new MultiSelectList(_tagService.GetAllTags(), "Id", "Name", travelPackage.Tags.Select(t => t.TagId));
             ViewBag.ItineraryList = new MultiSelectList(_itineraryService.GetAllItineraries(), "Id", "Title", travelPackage.Itineraries.Select(i => i.ItineraryId));
-            ViewBag.DepartureLocationList = new MultiSelectList(_departureLocationService.GetAllDepartureLocations(), "Id", null, travelPackage.DepartureLocations.Select(dl => dl.Id));
+            ViewBag.DepartureLocationList = new MultiSelectList(_departureLocationService.GetAllDepartureLocations(), "Id", null, travelPackage.DepartureLocations.Select(dl => dl.DepartureLocationId));
 
             var travelPackageDto = new TravelPackageDTO
             {
@@ -148,9 +171,9 @@ namespace TravelAgencyApplication.Web.Controllers
                 Season = travelPackage.Season,
                 UserId = travelPackage.UserId,
                 TransportType = travelPackage.TransportType,
-                Tags = travelPackage.Tags.Select(t => t.Id).ToList(),
+                Tags = travelPackage.Tags.Select(t => t.TagId).ToList(),
                 Itineraries = travelPackage.Itineraries.Select(i => i.ItineraryId).ToList(),
-                DepartureLocations = travelPackage.DepartureLocations.Select(dl => dl.Id).ToList()
+                DepartureLocations = travelPackage.DepartureLocations.Select(dl => dl.DepartureLocationId).ToList()
             };
             
             return View(travelPackageDto);
@@ -175,31 +198,24 @@ namespace TravelAgencyApplication.Web.Controllers
                     if (package != null)
                     {
 
-                            Console.WriteLine("Before for");
-                        package.Itineraries.ToList().ForEach(i =>
-                        {
-                            Console.WriteLine("Trying to delete :" + i.Itinerary.Id.ToString());
-                            _travelPackageItineraryService.DeleteTravelPackageItinerary(i.Itinerary.Id);
-                        });
-
+                        package.Itineraries.Clear();
                         _travelPackageService.UpdateExistingTravelPackage(package);
 
-                        //    List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
+                        List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
 
-                        //    List<TravelPackageItinerary> newTravelPackageItineraries = Itineraries.Select(x => new TravelPackageItinerary
-                        //    {
-                        //        Id = Guid.NewGuid(),
-                        //        TravelPackage = package,
-                        //        TravelPackageId = package.Id,
-                        //        Itinerary = x,
-                        //        ItineraryId = x.Id
-                        //    }).ToList();
+                        List<TravelPackageItinerary> newTravelPackageItineraries = Itineraries.Select(x => new TravelPackageItinerary
+                        {
+                            Id = Guid.NewGuid(),
+                            TravelPackage = package,
+                            TravelPackageId = package.Id,
+                            Itinerary = x,
+                            ItineraryId = x.Id
+                        }).ToList();
 
-                        //    //package.Itineraries = _travelPackageItineraryService.UpdateTravelPackageItineraries(package.Itineraries.ToList(), newTravelPackageItineraries);
+                        newTravelPackageItineraries.ForEach(_travelPackageItineraryService.CreateNewTravelPackageItinerary);
 
-                        //    newTravelPackageItineraries.ForEach(_travelPackageItineraryService.CreateNewTravelPackageItinerary);
-
-                        //    package.Itineraries = newTravelPackageItineraries;
+                        package.Itineraries = newTravelPackageItineraries;
+                        _travelPackageService.UpdateExistingTravelPackage(package);
 
                         //    package.Title = travelPackageDto.Title;
                         //    package.Details = travelPackageDto.Details;

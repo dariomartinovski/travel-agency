@@ -24,11 +24,11 @@ namespace TravelAgencyApplication.Repository.Implementation
         public IEnumerable<TravelPackage> GetAll()
         {
             return entities.Include(t=>t.Itineraries)
-                .Include(t=>t.DepartureLocations)
-                .Include(t=>t.Destination)
+                .Include(t => t.DepartureLocations)
+                .Include(t => t.Destination)
                 .Include(t => t.Destination.Country)
                 .Include(t => t.Destination.City)
-                .Include(t=>t.Guide).ToList();
+                .Include(t => t.Guide).ToList();
         }
 
         public TravelPackage Get(Guid? id)
@@ -36,6 +36,7 @@ namespace TravelAgencyApplication.Repository.Implementation
             return entities
                 //.AsNoTracking
                 .Include(t => t.DepartureLocations)
+                .Include("DepartureLocations.DepartureLocation")
                 .Include(t => t.Destination)
                 .Include(t => t.Destination.Country)
                 .Include(t => t.Destination.City)
