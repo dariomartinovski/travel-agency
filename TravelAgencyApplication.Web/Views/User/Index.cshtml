@@ -4,6 +4,14 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<form asp-controller="User" asp-action="ImportUsers" method="post" enctype="multipart/form-data" id="importForm">
+    <div class="form-group">
+        <p class="h6">Import Users </p>
+        <input type="file" name="file" class="form-control" required />
+        <span class="text-danger" id="fileValidationMessage"></span>
+    </div>
+    <button type="submit" class="btn btn-success my-2">Import Excel</button>
+</form>
 
 <table class="table">
     <thead>
@@ -11,10 +19,7 @@
             <th>Full Name</th>
             <th>Phone Number</th>
             <th>Employee Type</th>
-            @if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
-            {
-                <th>Actions</th>
-            }
+             <th>Actions</th>      
         </tr>
     </thead>
     <tbody>
@@ -24,20 +29,24 @@
                 <td>@item.FirstName @item.LastName</td>
                 <td>@item.PhoneNumber</td>
                 <td>@item.UserRole</td>
-                @if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
-                {
-                    <td>
-                        <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
-                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
-                        <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                    </td>
-                }
+              
+                <td>
+                    <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
+                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                    <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+               
             </tr>
         }
     </tbody>
 </table>
-@if (Model.CurrentUserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
-{
+<div>
+    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Register</a>
 
-    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary"> Register</a>
-}
+</div>
+
+
+
+
+ 
+
