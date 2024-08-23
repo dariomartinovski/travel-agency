@@ -1,9 +1,12 @@
-*.swp
+﻿*.swp
 *.*~
 project.lock.json
 .DS_Store
 *.pyc
 nupkg/
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
 
 # Visual Studio Code
 .vscode/
@@ -41,3 +44,14 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+/TravelAgencyApplication.Web/bin/Debug/net8.0
+/TravelAgencyApplication.Web/obj
+/TravelAgencyApplication.Service/obj/Debug/net8.0/refint
+/TravelAgencyApplication.Service/obj/Debug/net8.0
+/.vs
+/TravelAgencyApplication.Domain/bin/Debug/net8.0
+/TravelAgencyApplication.Domain/obj
+/TravelAgencyApplication.Repository/bin/Debug/net8.0
+/TravelAgencyApplication.Repository/obj
+/TravelAgencyApplication.Service/bin/Debug/net8.0
+/TravelAgencyApplication.Service/obj

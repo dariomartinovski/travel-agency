@@ -11,6 +11,5 @@ namespace TravelAgencyApplication.Domain.ViewModel
     public class TAUserIndexViewModel
     {
        public List<TAUser> Users {  get; set; }
-       public UserRole CurrentUserRole { get; set; }
     }
 }

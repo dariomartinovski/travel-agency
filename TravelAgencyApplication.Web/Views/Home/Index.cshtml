@@ -1,8 +1,14 @@
-﻿@{
+﻿@model TravelAgencyApplication.Domain.Identity.TAUser;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Travel Agency Application</h1>
+    @if(Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
+    {
+        <p>Do you want to become travel guide?</p>
+        <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+    }
 </div>
