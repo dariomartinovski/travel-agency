@@ -61,7 +61,7 @@ namespace TravelAgencyApplication.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.DestinationList = new SelectList(_destinationService.GetAllDestinations(), "Id", null);
-            ViewBag.UserList = new SelectList(_userService.GetAllTAUsers(), "Id", "FirstName");
+            ViewBag.UserList = new SelectList(_userService.GetAllGuides(), "Id", "FirstName");
             ViewBag.TagList = new SelectList(_tagService.GetAllTags(), "Id", "Name");
             ViewBag.ItineraryList = new SelectList(_itineraryService.GetAllItineraries(), "Id", "Title");
             ViewBag.DepartureLocationList = new SelectList(_departureLocationService.GetAllDepartureLocations(), "Id", null);

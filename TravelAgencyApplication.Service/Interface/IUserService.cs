@@ -11,6 +11,7 @@ namespace TravelAgencyApplication.Service.Interface
     public interface IUserService
     {
         List<TAUser> GetAllTAUsers();
+        List<TAUser> GetAllGuides();
         TAUser GetDetailsForTAUser(string id);
         void CreateNewTAUser(TAUser p);
         void UpdateExistingTAUser(TAUser p);

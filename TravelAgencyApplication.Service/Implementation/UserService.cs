@@ -48,5 +48,10 @@ namespace TravelAgencyApplication.Service.Implementation
         {
             return _userRepository.TAUserExists(userId);
         }
+
+        public List<TAUser> GetAllGuides()
+        {
+           return _userRepository.GetAllGuides().ToList();
+        }
     }
 }
