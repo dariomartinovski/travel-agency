@@ -9,46 +9,46 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Service.Implementation
 {
-    public class TravelPackageItineraryService : ITravelPackageItineraryService
+    public class TravelPackageDepartureLocationService: ITravelPackageDepartureLocationService
     {
-        private readonly IRepository<TravelPackageItinerary> _travelPackageRepository;
+        private readonly IRepository<TravelPackageDepartureLocation> _travelPackageRepository;
 
-        public TravelPackageItineraryService(IRepository<TravelPackageItinerary> travelPackageRepository)
+        public TravelPackageDepartureLocationService(IRepository<TravelPackageDepartureLocation> travelPackageRepository)
         {
             _travelPackageRepository = travelPackageRepository;
         }
 
-        public void CreateNewTravelPackageItinerary(TravelPackageItinerary p)
+        public void CreateNewTravelPackageDepartureLocation(TravelPackageDepartureLocation p)
         {
             _travelPackageRepository.Insert(p);
         }
 
-        public void DeleteTravelPackageItinerary(Guid? id)
+        public void DeleteTravelPackageDepartureLocation(Guid? id)
         {
-            TravelPackageItinerary tp = _travelPackageRepository.Get(id);
+            TravelPackageDepartureLocation tp = _travelPackageRepository.Get(id);
             if (tp != null)
             {
                 _travelPackageRepository.Delete(tp);
             }
         }
 
-        public List<TravelPackageItinerary> GetAllTravelPackageItinerarys()
+        public List<TravelPackageDepartureLocation> GetAllTravelPackageDepartureLocations()
         {
             return _travelPackageRepository.GetAll().ToList();
         }
 
-        public List<TravelPackageItinerary> GetAllTravelPackageItinerariesByIds(List<Guid> ids)
+        public List<TravelPackageDepartureLocation> GetAllTravelPackageItinerariesByIds(List<Guid> ids)
         {
             return _travelPackageRepository.GetAll().Where(i => ids.Contains(i.Id)).ToList();
         }
 
 
-        public TravelPackageItinerary GetDetailsForTravelPackageItinerary(Guid? id)
+        public TravelPackageDepartureLocation GetDetailsForTravelPackageDepartureLocation(Guid? id)
         {
             return _travelPackageRepository.Get(id);
         }
 
-        public void UpdateExistingTravelPackageItinerary(TravelPackageItinerary p)
+        public void UpdateExistingTravelPackageDepartureLocation(TravelPackageDepartureLocation p)
         {
             _travelPackageRepository.Update(p);
         }

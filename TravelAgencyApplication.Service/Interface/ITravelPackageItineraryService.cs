@@ -15,6 +15,5 @@ namespace TravelAgencyApplication.Service.Interface
         void CreateNewTravelPackageItinerary(TravelPackageItinerary p);
         void UpdateExistingTravelPackageItinerary(TravelPackageItinerary p);
         void DeleteTravelPackageItinerary(Guid? id);
-        List<TravelPackageItinerary> UpdateTravelPackageItineraries(List<TravelPackageItinerary> existingItineraries, List<TravelPackageItinerary> newItineraries);
     }
 }
