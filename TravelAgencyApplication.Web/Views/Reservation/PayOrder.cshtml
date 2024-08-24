@@ -1,0 +1,25 @@
+﻿@model TravelAgencyApplication.Domain.ViewModel.PaymentViewModel
+@using EShop.Domain
+@using Microsoft.Extensions.Options
+@inject IOptions<StripeSettings> Stripe
+
+@{
+    ViewData["Title"] = "Pay for Reservation";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Reservation" asp-action="PayOrder" method="post">
+    <article>
+        <input type="hidden" asp-for="TravelPackageId" />
+        <input type="hidden" asp-for="NumberOfPeople" />
+        <script src="https://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="@Stripe.Value.PublicKey"
+                data-locale="auto"
+                data-description="EShop Application Payment"
+                data-amount="@(Model.TotalPrice * 100)"
+                data-label="Pay $: @Model.TotalPrice">
+        </script>
+    </article>
+</form>
