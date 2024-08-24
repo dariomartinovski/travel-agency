@@ -58,9 +58,9 @@
         <label asp-for="Season" class="control-label"></label>
         <select asp-for="Season" class="form-control">
             <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SPRING)">Spring</option>
-            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER)">Summer</option>
-            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN)">Fall</option>
-            <option value="0" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER)">Winter</option>
+            <option value="1" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER)">Summer</option>
+            <option value="2" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN)">Fall</option>
+            <option value="3" selected="@(Model.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER)">Winter</option>
 
         </select>
         <span asp-validation-for="Season" class="text-danger"></span>
@@ -75,9 +75,9 @@
     <div class="form-group">
         <label asp-for="TransportType" class="control-label"></label>
         <select asp-for="TransportType" class="form-control">
-            <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE)">Airplane</option>
             <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS)">Bus</option>
-            <option value="0" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT)">Ship</option>
+            <option value="1" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE)">Airplance</option>
+            <option value="2" selected="@(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT)">Ship</option>
         </select>
         <span asp-validation-for="TransportType" class="text-danger"></span>
     </div>
@@ -106,7 +106,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

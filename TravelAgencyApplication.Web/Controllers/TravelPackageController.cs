@@ -15,17 +15,17 @@ namespace TravelAgencyApplication.Web.Controllers
 {
     public class TravelPackageController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
         private readonly ITravelPackageService _travelPackageService;
         private readonly ITravelPackageItineraryService _travelPackageItineraryService;
+        private readonly ITravelPackageTagService _travelPackageTagService;
+        private readonly ITravelPackageDepartureLocationService _travelPackageDepartureLocationService;
         private readonly IUserService _userService;
         private readonly IDestinationService _destinationService;
         private readonly IItineraryService _itineraryService;
         private readonly IDepartureLocationService _departureLocationService;
         private readonly ITagService _tagService;
 
-        public TravelPackageController(ApplicationDbContext application, ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService)
+        public TravelPackageController(ITravelPackageTagService travelPackageTagService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService, ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService)
         {
             _travelPackageService = travelPackageService;
             _userService = userService;
@@ -34,7 +34,8 @@ namespace TravelAgencyApplication.Web.Controllers
             _destinationService = destinationService;
             _tagService = tagService;
             _travelPackageItineraryService = travelPackageItineraryService;
-            _context = application;
+            _travelPackageDepartureLocationService = travelPackageDepartureLocationService;
+            _travelPackageTagService = travelPackageTagService;
         }
 
         public IActionResult Index()
@@ -198,12 +199,16 @@ namespace TravelAgencyApplication.Web.Controllers
                     if (package != null)
                     {
 
+                        package.Tags.Clear();
                         package.Itineraries.Clear();
+                        package.DepartureLocations.Clear();
                         _travelPackageService.UpdateExistingTravelPackage(package);
 
                         List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
+                        List<DepartureLocation> departureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations);
+                        List<Tag> tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags);
 
-                        List<TravelPackageItinerary> newTravelPackageItineraries = Itineraries.Select(x => new TravelPackageItinerary
+                        List<TravelPackageItinerary> travelPackageItineraries = Itineraries.Select(x => new TravelPackageItinerary
                         {
                             Id = Guid.NewGuid(),
                             TravelPackage = package,
@@ -212,30 +217,49 @@ namespace TravelAgencyApplication.Web.Controllers
                             ItineraryId = x.Id
                         }).ToList();
 
-                        newTravelPackageItineraries.ForEach(_travelPackageItineraryService.CreateNewTravelPackageItinerary);
+                        var travelPackageTags = new List<TravelPackageTag>();
+                        tags.ForEach(t => travelPackageTags.Add(new TravelPackageTag
+                        {
+                            Id = Guid.NewGuid(),
+                            TravelPackage = package,
+                            TravelPackageId = package.Id,
+                            Tag = t,
+                            TagId = t.Id
+                        }));
 
-                        package.Itineraries = newTravelPackageItineraries;
+                        var travelPackageDepartureLocations = new List<TravelPackageDepartureLocation>();
+                        departureLocations.ForEach(dl => travelPackageDepartureLocations.Add(new TravelPackageDepartureLocation
+                        {
+                            Id = Guid.NewGuid(),
+                            TravelPackage = package,
+                            TravelPackageId = package.Id,
+                            DepartureLocation = dl,
+                            DepartureLocationId = dl.Id
+                        }));
+
+                        travelPackageItineraries.ForEach(_travelPackageItineraryService.CreateNewTravelPackageItinerary);
+                        travelPackageTags.ForEach(_travelPackageTagService.CreateNewTravelPackageTag);
+                        travelPackageDepartureLocations.ForEach(_travelPackageDepartureLocationService.CreateNewTravelPackageDepartureLocation);
+
+                        package.Itineraries = travelPackageItineraries;
+                        package.Tags = travelPackageTags;
+                        package.DepartureLocations = travelPackageDepartureLocations;
+
+                        package.Title = travelPackageDto.Title;
+                        package.Details = travelPackageDto.Details;
+                        package.BasePrice = travelPackageDto.BasePrice;
+                        package.DepartureDate = travelPackageDto.DepartureDate;
+                        package.ReturnDate = travelPackageDto.ReturnDate;
+                        package.MaxCapacity = travelPackageDto.MaxCapacity;
+                        package.CurrentCapacity = travelPackageDto.MaxCapacity;
+                        package.DestinationId = travelPackageDto.DestinationId;
+                        package.Destination = _destinationService.GetDetailsForDestination(travelPackageDto.DestinationId);
+                        package.Season = (Season)travelPackageDto.Season;
+                        package.TransportType = (TransportType)travelPackageDto.TransportType;
+                        package.UserId = travelPackageDto.UserId;
+                        package.Guide = _userService.GetDetailsForTAUser(travelPackageDto.UserId);
+
                         _travelPackageService.UpdateExistingTravelPackage(package);
-
-                        //    package.Title = travelPackageDto.Title;
-                        //    package.Details = travelPackageDto.Details;
-                        //    package.BasePrice = travelPackageDto.BasePrice;
-                        //    package.DepartureDate = travelPackageDto.DepartureDate;
-                        //    package.ReturnDate = travelPackageDto.ReturnDate;
-                        //    package.MaxCapacity = travelPackageDto.MaxCapacity;
-                        //    package.CurrentCapacity = travelPackageDto.MaxCapacity;
-                        //    package.DestinationId = travelPackageDto.DestinationId;
-                        //    package.Destination = _destinationService.GetDetailsForDestination(travelPackageDto.DestinationId);
-                        //    package.Season = travelPackageDto.Season;
-                        //    package.TransportType = travelPackageDto.TransportType;
-                        //    package.UserId = travelPackageDto.UserId;
-                        //    package.Guide = _userService.GetDetailsForTAUser(travelPackageDto.UserId);
-                        //    package.Tags = _tagService.GetAllTagsByIds(travelPackageDto.Tags);
-
-                        //    package.DepartureLocations = _departureLocationService.GetAllDepartureLocationsByIds(travelPackageDto.DepartureLocations);
-
-
-                        //    _travelPackageService.UpdateExistingTravelPackage(package);
                     }
 
                 }
@@ -246,11 +270,6 @@ namespace TravelAgencyApplication.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(travelPackageDto);
-        }
-
-        public IActionResult Test() {
-            _travelPackageItineraryService.DeleteTravelPackageItinerary(new Guid("951b372a-2260-48e3-8353-65670afc139f  "));
-            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost, ActionName("Delete")]

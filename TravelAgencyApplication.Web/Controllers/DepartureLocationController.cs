@@ -30,7 +30,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("CityId,Location,DepartureTime")] DepartureLocation departureLocation)
+        public IActionResult Create([Bind("CityId, Location, DepartureTime")] DepartureLocation departureLocation)
         {
             if (ModelState.IsValid)
             {

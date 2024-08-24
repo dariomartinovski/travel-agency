@@ -28,6 +28,6 @@
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
         <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to List</a>
     </form>
 </div>

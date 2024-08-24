@@ -24,25 +24,31 @@ namespace TravelAgencyApplication.Repository.Implementation
         public IEnumerable<TravelPackage> GetAll()
         {
             return entities.Include(t=>t.Itineraries)
-                .Include(t => t.DepartureLocations)
                 .Include(t => t.Destination)
                 .Include(t => t.Destination.Country)
                 .Include(t => t.Destination.City)
+                .Include(t => t.Itineraries)
+                .Include("Itineraries.Itinerary")
+                .Include(t => t.DepartureLocations)
+                .Include("DepartureLocations.DepartureLocation")
+                .Include(t => t.Tags)
+                .Include("Tags.Tag")
                 .Include(t => t.Guide).ToList();
         }
 
         public TravelPackage Get(Guid? id)
         {
             return entities
-                //.AsNoTracking
-                .Include(t => t.DepartureLocations)
-                .Include("DepartureLocations.DepartureLocation")
                 .Include(t => t.Destination)
                 .Include(t => t.Destination.Country)
                 .Include(t => t.Destination.City)
                 .Include(t => t.Guide)
                 .Include(t => t.Itineraries)
                 .Include("Itineraries.Itinerary")
+                .Include(t => t.DepartureLocations)
+                .Include("DepartureLocations.DepartureLocation")
+                .Include(t => t.Tags)
+                .Include("Tags.Tag")
                 .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(TravelPackage entity)

@@ -55,10 +55,10 @@
     <div class="form-group">
         <label asp-for="Season" class="control-label"></label>
         <select asp-for="Season" class="form-control">
-            <option value="0">Winter</option>
-            <option value="1">Spring</option>
-            <option value="2">Summer</option>
-            <option value="3">Fall</option>
+            <option value="0">Spring</option>
+            <option value="1">Summer</option>
+            <option value="2">Autumn</option>
+            <option value="3">Winter</option>
         </select>
         <span asp-validation-for="Season" class="text-danger"></span>
     </div>
@@ -72,10 +72,9 @@
     <div class="form-group">
         <label asp-for="TransportType" class="control-label"></label>
         <select asp-for="TransportType" class="form-control">
-            <option value="0">Airplane</option>
-            <option value="1">Bus</option>
-            <option value="2">Train</option>
-            <option value="3">Ship</option>
+            <option value="0">Bus</option>
+            <option value="1">Airplance</option>
+            <option value="2">Ship</option>
         </select>
         <span asp-validation-for="TransportType" class="text-danger"></span>
     </div>
@@ -104,7 +103,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {
