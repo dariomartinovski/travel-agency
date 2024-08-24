@@ -81,21 +81,6 @@ public class RegisterModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(string returnUrl = null)
     {
-        if (User.Identity.IsAuthenticated)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var role = user.UserRole;
-
-            if (role == UserRole.TRAVEL_GUIDE || role == UserRole.CUSTOMER)
-            {
-                return Redirect("/Identity/Account/Login");
-            }
-        }
-        else
-        {
-            // Redirect unauthenticated users to the login page
-            return Redirect("/Identity/Account/Login");
-        }
 
         ReturnUrl = returnUrl;
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();

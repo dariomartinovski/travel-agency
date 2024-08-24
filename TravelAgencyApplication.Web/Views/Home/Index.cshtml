@@ -6,9 +6,12 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome to Travel Agency Application</h1>
-    @if(Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
+    @if(Model != null)
     {
-        <p>Do you want to become travel guide?</p>
-        <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+        @if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
+        {
+            <p>Do you want to become travel guide?</p>
+            <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+        }
     }
 </div>

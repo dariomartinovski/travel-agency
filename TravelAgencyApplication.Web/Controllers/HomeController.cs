@@ -1,9 +1,9 @@
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TravelAgencyApplication.Domain.Enum;
 using TravelAgencyApplication.Service.Interface;
 using TravelAgencyApplication.Web.Models;
+using Microsoft.AspNet.Identity;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
@@ -22,10 +22,6 @@ namespace TravelAgencyApplication.Web.Controllers
         public IActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            if (userId == null)
-            {
-                return Redirect("/Identity/Account/Login");
-            }
             var currentUser = _userService.GetDetailsForTAUser(userId);
            
             return View(currentUser);
