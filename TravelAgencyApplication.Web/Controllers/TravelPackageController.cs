@@ -161,7 +161,7 @@ namespace TravelAgencyApplication.Web.Controllers
                 travelPackage.DepartureLocations = travelPackageDepartureLocations;
 
                 _travelPackageService.CreateNewTravelPackage(travelPackage);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminIndex));
             }
             return View(travelPackageDto);
         }
@@ -296,7 +296,7 @@ namespace TravelAgencyApplication.Web.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminIndex));
             }
             return View(travelPackageDto);
         }
@@ -329,10 +329,10 @@ namespace TravelAgencyApplication.Web.Controllers
                         _travelPackageService.DeleteTravelPackage(id);
                     }
 
-                    return RedirectToAction(nameof(Index));;
+                    return RedirectToAction(nameof(AdminIndex));;
                 }
             }
-            return RedirectToAction(nameof(Index)); ;
+            return RedirectToAction(nameof(AdminIndex)); ;
         }
 
     }
