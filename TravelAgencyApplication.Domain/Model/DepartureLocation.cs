@@ -13,7 +13,7 @@ namespace TravelAgencyApplication.Domain.Model
         public Guid CityId { get; set; }
         public string? Location { get; set; }
         public TimeOnly DepartureTime { get; set; }
-        public ICollection<TravelPackageDepartureLocation> TravelPackages { get; set; } = new List<TravelPackageDepartureLocation>();
+        public virtual ICollection<TravelPackageDepartureLocation>? TravelPackages { get; set; } = new List<TravelPackageDepartureLocation>();
         public override string ToString()
         {
             return $"{City?.Name ?? "Unknown City"}, {Location ?? "Unknown Location"} at {DepartureTime:hh\\:mm tt}";

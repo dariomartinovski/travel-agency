@@ -4,6 +4,7 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class TagController : Controller
     {
         private readonly ITagService _tagService;
@@ -13,18 +14,22 @@ namespace TravelAgencyApplication.Web.Controllers
             _tagService = tagService;
         }
 
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var tags = _tagService.GetAllTags();
             return View(tags);
         }
 
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name")] Tag tag)
         {
@@ -36,6 +41,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(tag);
         }
 
+        [Route("Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -52,6 +58,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,Name")] Tag tag)
         {
@@ -68,6 +75,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(tag);
         }
 
+        [Route("Delete/{id?}")]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -85,6 +93,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {

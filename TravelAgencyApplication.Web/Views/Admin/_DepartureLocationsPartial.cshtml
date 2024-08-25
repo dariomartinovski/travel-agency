@@ -1,0 +1,34 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.DepartureLocation>
+
+<div id="DepartureLocationsSection" class="admin-section">
+    <h2>Departure locations</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Location</th>
+                <th>Departure Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+            @foreach (var departureLocation in Model)
+            {
+                <tr>
+                    <td>@departureLocation.City?.Name</td>
+                    <td>@departureLocation.Location</td>
+                    <td>@departureLocation.DepartureTime.ToString("hh:mm tt")</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "DepartureLocation", new { id = departureLocation.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Delete", "DepartureLocation", new { id = departureLocation.Id })" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "DepartureLocation")" class="btn btn-primary">Create New Departure Location</a>
+</div>

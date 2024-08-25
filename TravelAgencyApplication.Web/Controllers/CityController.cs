@@ -4,6 +4,7 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class CityController : Controller
     {
         private readonly ICityService _cityService;
@@ -13,12 +14,15 @@ namespace TravelAgencyApplication.Web.Controllers
             _cityService = cityService;
         }
 
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var cities = _cityService.GetAllCities();
             return View(cities);
         }
 
+        [Route("Details/{id?}")]
         public IActionResult Details(Guid? id)
         {
             if (id == null)
@@ -35,12 +39,14 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(city);
         }
 
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name")] City city)
         {
@@ -53,6 +59,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(city);
         }
 
+        [Route("Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -70,6 +77,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id, Name")] City city)
         {
@@ -86,6 +94,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(city);
         }
 
+        [Route("Delete/{id?}")]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -103,6 +112,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {

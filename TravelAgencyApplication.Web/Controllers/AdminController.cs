@@ -42,5 +42,39 @@ namespace TravelAgencyApplication.Web.Controllers
             };
             return View(model);
         }
+
+        public IActionResult LoadSection(string section)
+        {
+            switch (section)
+            {
+                case "Users":
+                    var users = _userService.GetAllTAUsers(); 
+                    return PartialView("_UsersPartial", users);
+                case "Cities":
+                    var cities = _cityService.GetAllCities();
+                    return PartialView("_CitiesPartial", cities);
+                case "Countries":
+                    var countries = _countryService.GetAllCountries();
+                    return PartialView("_CountriesPartial", countries);
+                case "DepartureLocations":
+                    var locations = _departureLocationService.GetAllDepartureLocations();
+                    return PartialView("_DepartureLocationsPartial", locations);
+                case "Destinations":
+                    var destinations = _destinationService.GetAllDestinations();
+                    return PartialView("_DestinationsPartial", destinations);
+                case "TravelPackages":
+                    var packages = _travelPackageService.GetAllTravelPackages();
+                    return PartialView("_TravelPackagesPartial", packages);
+                case "Itineraries":
+                    var itineraries = _itineraryService.GetAllItineraries();
+                    return PartialView("_ItinerariesPartial", itineraries);
+                case "Tags":
+                    var tags = _tagService.GetAllTags();
+                    return PartialView("_TagsPartial", tags);
+                default:
+                    var users1 = _userService.GetAllTAUsers();
+                    return PartialView("_UsersPartial", users1);
+            }
+        }
     }
 }

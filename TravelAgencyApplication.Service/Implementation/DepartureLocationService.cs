@@ -25,7 +25,7 @@ namespace TravelAgencyApplication.Service.Implementation
         public void DeleteDepartureLocation(Guid id)
         {
             var location = _departureLocationRepository.Get(id);
-            if (location != null) { 
+            if (location != null) {
                 _departureLocationRepository.Delete(location);
             }
         }

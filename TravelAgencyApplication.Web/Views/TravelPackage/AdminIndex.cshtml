@@ -37,13 +37,14 @@
                 <td>@package.Season</td>
                 <td>@package.TransportType</td>
                 <td>
-                    <a href="@Url.Action("Details", "TravelPackage", new { id = package.Id })" class="btn btn-info">Details</a>
-@*                     <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("AdminDetails", "TravelPackage", new { id = package.Id })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-warning">Edit</a>
                     <a href="@Url.Action("Delete", "TravelPackage", new { id = package.Id })" class="btn btn-danger">Delete</a>
                 </td>
- *@            </tr>
+                
+            </tr>
         }
     </tbody>
 </table>
-
-@* <a href="@Url.Action("Create", "TravelPackage")" class="btn btn-primary">Create New Travel Package</a> *@
+ <a href="@Url.Action("Create", "TravelPackage")" class="btn btn-primary">Create New Travel Package</a>
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Admin Panel</a>

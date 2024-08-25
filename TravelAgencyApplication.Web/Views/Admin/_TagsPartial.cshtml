@@ -1,0 +1,31 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Tag>
+
+<div id="TagsSection" class="admin-section">
+    <h2>Tags</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+            @foreach (var tag in Model)
+            {
+                <tr>
+                    <td>@tag.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Tag", new { id = tag.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Delete", "Tag", new { id = tag.Id })" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "Tag")" class="btn btn-primary">Create New Tag</a>
+
+</div>

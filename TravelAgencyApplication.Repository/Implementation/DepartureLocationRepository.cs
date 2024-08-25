@@ -24,12 +24,17 @@ namespace TravelAgencyApplication.Repository.Implementation
 
         public IEnumerable<DepartureLocation> GetAll()
         {
-            return entities.Include(t => t.City).ToList();
+            return entities.Include(t => t.City)
+                .Include(t => t.TravelPackages)
+                .Include("TravelPackages.TravelPackage")
+                .ToList();
         }
         public IEnumerable<DepartureLocation> GetAllDepartureLocationsByIds(List<Guid> ids)
         {
             return entities
                 .Include(t => t.City)
+                .Include(t => t.TravelPackages)
+                .Include("TravelPackages.TravelPackage")
                 .Where(it => ids.Contains(it.Id))
                 .ToList();
         }
@@ -38,6 +43,8 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities
                 .Include(t => t.City)
+                .Include(t => t.TravelPackages)
+                .Include("TravelPackages.TravelPackage")
                 .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(DepartureLocation entity)

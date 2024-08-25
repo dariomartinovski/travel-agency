@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Country>
+
+<div id="CountriesSection" class="admin-section">
+    <h2>Countries</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+            @foreach (var country in Model)
+            {
+                <tr>
+                    <td>@country.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Country", new { id = country.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Delete", "Country", new { id = country.Id })" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "Country")" class="btn btn-primary">Create New Country</a>
+</div>

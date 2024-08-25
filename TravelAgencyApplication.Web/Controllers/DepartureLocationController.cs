@@ -5,23 +5,29 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class DepartureLocationController : Controller
     {
         private readonly IDepartureLocationService _departureLocationService;
+        private readonly ITravelPackageDepartureLocationService _travelPackageDepartureLocationService;
         private readonly ICityService _cityService;
 
-        public DepartureLocationController(IDepartureLocationService departureLocationService, ICityService cityService)
+        public DepartureLocationController(IDepartureLocationService departureLocationService, ICityService cityService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService)
         {
             _departureLocationService = departureLocationService;
             _cityService = cityService;
+            _travelPackageDepartureLocationService = travelPackageDepartureLocationService;
         }
 
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var departureLocations = _departureLocationService.GetAllDepartureLocations();
             return View(departureLocations);
         }
 
+        [Route("Create")]
         public IActionResult Create()
         {
             ViewBag.CityList = new SelectList(_cityService.GetAllCities(), "Id", "Name");
@@ -29,8 +35,9 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("CityId, Location, DepartureTime")] DepartureLocation departureLocation)
+        public IActionResult Create([Bind("CityId,Location,DepartureTime")] DepartureLocation departureLocation)
         {
             if (ModelState.IsValid)
             {
@@ -41,6 +48,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(departureLocation);
         }
 
+        [Route("Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -58,6 +66,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,CityId,Location,DepartureTime")] DepartureLocation departureLocation)
         {
@@ -75,6 +84,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(departureLocation);
         }
 
+        [Route("Delete/{id?}")]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -92,9 +102,13 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            //var dp = _departureLocationService.GetDetailsForDepartureLocation(id);
+            //dp.TravelPackages.Clear();
+            //_departureLocationService.UpdateExistingDepartureLocation(dp);
             _departureLocationService.DeleteDepartureLocation(id);
             return RedirectToAction(nameof(Index));
         }

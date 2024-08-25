@@ -59,7 +59,6 @@ namespace TravelAgencyApplication.Repository.Implementation
             context.Entry(existingEntity).CurrentValues.SetValues(entity);
 
             context.SaveChanges();
-           
         }
 
         public void Delete(TAUser entity)

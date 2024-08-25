@@ -5,6 +5,7 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class DestinationController : Controller
     {
         private readonly IDestinationService _destinationService;
@@ -18,12 +19,15 @@ namespace TravelAgencyApplication.Web.Controllers
             _cityService = cityService;
         }
 
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var destinations = _destinationService.GetAllDestinations();
             return View(destinations);
         }
 
+        [Route("Create")]
         public IActionResult Create()
         {
             ViewBag.CountryList = new SelectList(_countryService.GetAllCountries(), "Id", "Name");
@@ -32,6 +36,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("CountryId,CityId")] Destination destination)
         {
@@ -45,6 +50,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(destination);
         }
 
+        [Route("Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -63,6 +69,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,CountryId,CityId")] Destination destination)
         {
@@ -81,6 +88,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(destination);
         }
 
+        [Route("Delete/{id?}")]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -98,6 +106,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {

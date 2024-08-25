@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Identity.TAUser>
+
+<h2>Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Phone Number</th>
+            <th>Employee Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName @item.LastName</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.UserRole</td>
+                <td>
+                    <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
+                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                    <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
+<a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Register</a>

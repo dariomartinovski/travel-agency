@@ -6,7 +6,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <!-- Dropdown Menu -->
-<select id="admin-section-select" class="form-control" onchange="showSection(this.value)">
+<select id="admin-section-select" class="form-control" onchange="loadSection(this.value)">
     <option value="Users">Users</option>
     <option value="Cities">Cities</option>
     <option value="Countries">Countries</option>
@@ -17,295 +17,23 @@
     <option value="TravelPackages">Travel Packages</option>
 </select>
 
-<!-- Users Section -->
-<div id="UsersSection" class="admin-section">
-    <h2>Users</h2>
-    <form asp-controller="User" asp-action="ImportUsers" method="post" enctype="multipart/form-data" id="importForm">
-        <div class="form-group">
-            <p class="h6">Import Users </p>
-            <input type="file" name="file" class="form-control" required />
-            <span class="text-danger" id="fileValidationMessage"></span>
-        </div>
-        <button type="submit" class="btn btn-success my-2">Import Excel</button>
-    </form>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Full Name</th>
-                <th>Phone Number</th>
-                <th>Employee Type</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Users)
-            {
-                <tr>
-                    <td>@item.FirstName @item.LastName</td>
-                    <td>@item.PhoneNumber</td>
-                    <td>@item.UserRole</td>
-
-                    <td>
-                        <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
-                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
-                        <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div>
-        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Register</a>
-
-    </div>
+<div id="section-content">
+    <!-- The content of the selected section will be loaded here -->
 </div>
-
-
-<!-- City Section -->
-<div id="CitiesSection" class="admin-section">
-    <h2>Cities</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var city in Model.Cities)
-            {
-                <tr>
-                    <td>@city.Name</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "City", new { id = city.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "City", new { id = city.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "City")" class="btn btn-primary">Create New City</a>
-</div>
-
-<!-- Country Section -->
-<div id="CountriesSection" class="admin-section">
-    <h2>Countries</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var country in Model.Countries)
-            {
-                <tr>
-                    <td>@country.Name</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Country", new { id = country.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "Country", new { id = country.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "Country")" class="btn btn-primary">Create New Country</a>
-</div>
-
-<!-- DepartureLocation Section -->
-<div id="DepartureLocationsSection" class="admin-section">
-    <h2>Departure locations</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>City</th>
-                <th>Location</th>
-                <th>Departure Time</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var departureLocation in Model.DepartureLocations)
-            {
-                <tr>
-                    <td>@departureLocation.City?.Name</td>
-                    <td>@departureLocation.Location</td>
-                    <td>@departureLocation.DepartureTime.ToString("hh:mm tt")</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "DepartureLocation", new { id = departureLocation.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "DepartureLocation", new { id = departureLocation.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "DepartureLocation")" class="btn btn-primary">Create New Departure Location</a>
-</div>
-
-<!-- Destination Section -->
-<div id="DestinationsSection" class="admin-section">
-    <h2>Destinations</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>City</th>
-                <th>Country</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var destination in Model.Destinations)
-            {
-                <tr>
-                    <td>@destination.City?.Name</td>
-                    <td>@destination.Country?.Name</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Destination", new { id = destination.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "Destination", new { id = destination.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "Destination")" class="btn btn-primary">Create New Destination</a>
-
-</div>
-
-<!-- Tags Section -->
-<div id="TagsSection" class="admin-section">
-    <h2>Tags</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var tag in Model.Tags)
-            {
-                <tr>
-                    <td>@tag.Name</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Tag", new { id = tag.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "Tag", new { id = tag.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "Tag")" class="btn btn-primary">Create New Tag</a>
-
-</div>
-
-<!-- Itineraries Section -->
-<div id="ItinerariesSection" class="admin-section">
-    <h2>Itineraries</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Details</th>
-                <th>Price</th>
-                <th>Date</th>
-                <th>Destination</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var itinerary in Model.Itineraries)
-            {
-                <tr>
-                    <td>@itinerary.Title</td>
-                    <td>@itinerary.Details</td>
-                    <td>@itinerary.Price</td>
-                    <td>@itinerary.Date.ToShortDateString()</td>
-                    <td>@itinerary.Destination?.ToString()</td>
-                    <td>
-                        <a href="@Url.Action("Details", new { id = itinerary.Id })" class="btn btn-info">Details</a>
-                        <a href="@Url.Action("Edit", new { id = itinerary.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", new { id = itinerary.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Itinerary</a>
-
-</div>
-
-<!-- Travel Package Section -->
-<div id="TravelPackagesSection" class="admin-section">
-    <h2>Travel packages</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Details</th>
-                <th>Base Price</th>
-                <th>Departure Date</th>
-                <th>Return Date</th>
-                <th>Destination</th>
-                <th>Max Capacity</th>
-                <th>Current Capacity</th>
-                <th>Season</th>
-                <th>Transport Type</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var package in Model.TravelPackages)
-            {
-                <tr>
-                    <td>@package.Title</td>
-                    <td>@package.Details</td>
-                    <td>@package.BasePrice.ToString("C")</td>
-                    <td>@package.DepartureDate.ToShortDateString()</td>
-                    <td>@package.ReturnDate.ToShortDateString()</td>
-                    <td>@package.Destination?.ToString()</td>
-                    <td>@package.MaxCapacity</td>
-                    <td>@package.CurrentCapacity</td>
-                    <td>@package.Season</td>
-                    <td>@package.TransportType</td>
-                    <td>
-                        <a href="@Url.Action("Details", "TravelPackage", new { id = package.Id })" class="btn btn-info">Details</a>
-                        <a href="@Url.Action("Edit", "TravelPackage", new { id = package.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", "TravelPackage", new { id = package.Id })" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a href="@Url.Action("Create", "TravelPackage")" class="btn btn-primary">Create New Travel Package</a>
-
-</div>
-
-
 
 <script>
-    function showSection(section) {
-        var sections = document.querySelectorAll('.admin-section');
-        sections.forEach(function (sec) {
-            sec.style.display = 'none';
+    function loadSection(section) {
+        $.ajax({
+            url: '/Admin/LoadSection',
+            type: 'GET',
+            data: { section: section },
+            success: function (result) {
+                $('#section-content').html(result);
+            }
         });
-
-        var selectedSection = document.getElementById(section + 'Section');
-        if (selectedSection) {
-            selectedSection.style.display = 'block';
-        }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        showSection('Users'); // Default section
+    $(document).ready(function () {
+        loadSection('Users')
     });
 </script>

@@ -59,6 +59,32 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(travelPackage);
         }
 
+        [Route("Admin/[controller]")]
+        [Route("Admin/[controller]/Index")]
+        public IActionResult AdminIndex()
+        {
+            var travelPackages = _travelPackageService.GetAllTravelPackages();
+            return View(travelPackages);
+
+        }
+
+        [Route("Admin/[controller]/Details/{id?}")]
+        public async Task<IActionResult> AdminDetails(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
+            if (travelPackage == null)
+            {
+                return NotFound();
+            }
+            return View(travelPackage);
+        }
+
+        [Route("Admin/[controller]/Create")]
         public IActionResult Create()
         {
             ViewBag.DestinationList = new SelectList(_destinationService.GetAllDestinations(), "Id", null);
@@ -71,6 +97,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Admin/[controller]/Create")]
         public IActionResult Create([Bind("Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
             if (ModelState.IsValid)
@@ -140,6 +167,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         // GET: TravelPackage/Edit/5
+        [Route("Admin/[controller]/Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -176,7 +204,7 @@ namespace TravelAgencyApplication.Web.Controllers
                 Itineraries = travelPackage.Itineraries.Select(i => i.ItineraryId).ToList(),
                 DepartureLocations = travelPackage.DepartureLocations.Select(dl => dl.DepartureLocationId).ToList()
             };
-            
+
             return View(travelPackageDto);
         }
 
@@ -184,6 +212,7 @@ namespace TravelAgencyApplication.Web.Controllers
         // POST: TravelPackage/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Admin/[controller]/Edit/{id}")]
         public IActionResult Edit(Guid id, [Bind("Id, Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
             if (id != travelPackageDto.Id)
@@ -272,9 +301,21 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(travelPackageDto);
         }
 
+        [Route("Admin/[controller]/Delete/{id?}")]
+        public IActionResult Delete(Guid id)
+        {
+            var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
+            if (travelPackage == null)
+            {
+                return NotFound();
+            }
+            return View(travelPackage);
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid? id)
+        [Route("Admin/[controller]/Delete/{id?}")]
+        public IActionResult Delete(Guid? id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId != null && id != null)
@@ -292,8 +333,6 @@ namespace TravelAgencyApplication.Web.Controllers
                 }
             }
             return RedirectToAction(nameof(Index)); ;
-
-            //return Unauthorized();
         }
 
     }

@@ -31,7 +31,7 @@ namespace TravelAgencyApplication.Service.Implementation
                 _travelPackageRepository.Delete(tp);
             }
         }
-
+  
         public List<TravelPackageDepartureLocation> GetAllTravelPackageDepartureLocations()
         {
             return _travelPackageRepository.GetAll().ToList();
