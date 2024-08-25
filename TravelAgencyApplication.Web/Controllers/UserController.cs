@@ -14,6 +14,7 @@ using System.Configuration;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -22,6 +23,8 @@ namespace TravelAgencyApplication.Web.Controllers
         {
             _userService = userService;
         }
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var userId = User.Identity.GetUserId();
@@ -45,6 +48,8 @@ namespace TravelAgencyApplication.Web.Controllers
 
             return View(viewModel);
         }
+
+        [Route("Details/{id?}")]
         public async Task<IActionResult> Details(string? id)
         {
             if (!User.Identity.IsAuthenticated)
@@ -75,6 +80,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return View(user);
         }
 
+        [Route("Edit/{id?}")]
         public IActionResult Edit(string? id)
         {
 
@@ -94,6 +100,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Edit/{id}")]
         public IActionResult Edit(string id, [Bind("Id,FirstName,LastName,PhoneNumber")] TAUser user)
         {
             if (id != user.Id)
@@ -119,6 +126,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
 
         // GET: TAUsers/Delete/5
+        [Route("Delete/{id?}")]
         public IActionResult Delete(string? id)
         {
             if (id == null)
@@ -137,6 +145,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("Delete/{id?}")]
         public IActionResult DeleteConfirmed(string id)
         {
             var user = _userService.GetDetailsForTAUser(id);
@@ -148,6 +157,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("ImportUsers")]
         public IActionResult ImportUsers(IFormFile file)
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
@@ -202,6 +212,7 @@ namespace TravelAgencyApplication.Web.Controllers
             return users;
         }
 
+        [Route("MakeTouristGuide")]
         public IActionResult MakeTouristGuide(string id)
         {
             if (id == null)

@@ -23,14 +23,14 @@
                 <td>@itinerary.Date.ToShortDateString()</td>
                 <td>@itinerary.Destination?.ToString()</td>
                 <td>
-                    <a href="@Url.Action("Details", new { id = itinerary.Id })" class="btn btn-info">Details</a>
-                    <a href="@Url.Action("Edit", new { id = itinerary.Id })" class="btn btn-warning">Edit</a>
-                    <a href="@Url.Action("Delete", new { id = itinerary.Id })" class="btn btn-danger">Delete</a>
+                    <a asp-action="Details" asp-route-id="@itinerary.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Details" asp-route-id="@itinerary.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@itinerary.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a href="@Url.Action("Create")" class="btn btn-primary">Create New Itinerary</a>
+<a asp-action="Create" class="btn btn-primary">Create New Itinerary</a>
 <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Admin Panel</a>

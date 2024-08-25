@@ -5,6 +5,7 @@ using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
+    [Route("Admin/[controller]")]
     public class ItineraryController : Controller
     {
         private readonly IItineraryService _itineraryService;
@@ -17,6 +18,8 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         // GET: Itinerary/Index
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             var itineraries = _itineraryService.GetAllItineraries();
@@ -24,6 +27,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         // GET: Itinerary/Details/5
+        [Route("Details/{id?}")]
         public IActionResult Details(Guid id)
         {
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
@@ -33,7 +37,7 @@ namespace TravelAgencyApplication.Web.Controllers
             }
             return View(itinerary);
         }
-
+        [Route("Create")]
         public IActionResult Create()
         {
             List<Destination> destinations = _destinationService.GetAllDestinations();
@@ -43,6 +47,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Create")]
         public IActionResult Create(Itinerary itinerary)
         {
             if (ModelState.IsValid)
@@ -53,7 +58,7 @@ namespace TravelAgencyApplication.Web.Controllers
             ViewBag.Destinations = _destinationService.GetAllDestinations();
             return View(itinerary);
         }
-
+        [Route("Edit/{id?}")]
         public IActionResult Edit(Guid id)
         {
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
@@ -67,6 +72,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, Itinerary itinerary)
         {
@@ -84,7 +90,7 @@ namespace TravelAgencyApplication.Web.Controllers
             ViewBag.DestinationList = new SelectList(destinations, "Id", null);
             return View(itinerary);
         }
-
+        [Route("Delete/{id?}")]
         public IActionResult Delete(Guid id)
         {
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
@@ -96,6 +102,7 @@ namespace TravelAgencyApplication.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {

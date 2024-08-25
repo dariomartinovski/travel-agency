@@ -330,19 +330,19 @@ namespace TravelAgencyApplication.Repository.Migrations
                 name: "TravelPackageDepartureLocation",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TravelPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartureLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DepartureLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TravelPackageDepartureLocation", x => x.Id);
+                    table.PrimaryKey("PK_TravelPackageDepartureLocation", x => new { x.TravelPackageId, x.DepartureLocationId });
                     table.ForeignKey(
                         name: "FK_TravelPackageDepartureLocation_DeparatureLocations_DepartureLocationId",
                         column: x => x.DepartureLocationId,
                         principalTable: "DeparatureLocations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelPackageDepartureLocation_TravelPackages_TravelPackageId",
                         column: x => x.TravelPackageId,
@@ -355,50 +355,50 @@ namespace TravelAgencyApplication.Repository.Migrations
                 name: "TravelPackageItinerary",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TravelPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItineraryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ItineraryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TravelPackageItinerary", x => x.Id);
+                    table.PrimaryKey("PK_TravelPackageItinerary", x => new { x.TravelPackageId, x.ItineraryId });
                     table.ForeignKey(
                         name: "FK_TravelPackageItinerary_Itineraries_ItineraryId",
                         column: x => x.ItineraryId,
                         principalTable: "Itineraries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelPackageItinerary_TravelPackages_TravelPackageId",
                         column: x => x.TravelPackageId,
                         principalTable: "TravelPackages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TravelPackageTag",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TravelPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TravelPackageTag", x => x.Id);
+                    table.PrimaryKey("PK_TravelPackageTag", x => new { x.TravelPackageId, x.TagId });
                     table.ForeignKey(
                         name: "FK_TravelPackageTag_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelPackageTag_TravelPackages_TravelPackageId",
                         column: x => x.TravelPackageId,
                         principalTable: "TravelPackages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -476,19 +476,9 @@ namespace TravelAgencyApplication.Repository.Migrations
                 column: "DepartureLocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageDepartureLocation_TravelPackageId",
-                table: "TravelPackageDepartureLocation",
-                column: "TravelPackageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TravelPackageItinerary_ItineraryId",
                 table: "TravelPackageItinerary",
                 column: "ItineraryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageItinerary_TravelPackageId",
-                table: "TravelPackageItinerary",
-                column: "TravelPackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TravelPackages_DestinationId",
@@ -504,11 +494,6 @@ namespace TravelAgencyApplication.Repository.Migrations
                 name: "IX_TravelPackageTag_TagId",
                 table: "TravelPackageTag",
                 column: "TagId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TravelPackageTag_TravelPackageId",
-                table: "TravelPackageTag",
-                column: "TravelPackageId");
         }
 
         /// <inheritdoc />
