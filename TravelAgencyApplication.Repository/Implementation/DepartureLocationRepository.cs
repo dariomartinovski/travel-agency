@@ -73,7 +73,12 @@ namespace TravelAgencyApplication.Repository.Implementation
             {
                 throw new ArgumentNullException("entity");
             }
-            entities.Remove(entity);
+            context.Entry(entity).Collection(e => e.TravelPackages).Load();
+
+            // Manually remove related entities
+            context.TravelPackageDepartureLocations.RemoveRange(entity.TravelPackages);
+
+            context.DeparatureLocations.Remove(entity);
             context.SaveChanges();
         }
     }

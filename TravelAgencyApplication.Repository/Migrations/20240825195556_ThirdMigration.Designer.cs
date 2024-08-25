@@ -12,8 +12,8 @@ using TravelAgencyApplication.Web.Data;
 namespace TravelAgencyApplication.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240825183600_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240825195556_ThirdMigration")]
+    partial class ThirdMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -442,56 +442,65 @@ namespace TravelAgencyApplication.Repository.Migrations
 
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageDepartureLocation", b =>
                 {
-                    b.Property<Guid>("TravelPackageId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DepartureLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TravelPackageId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TravelPackageId", "DepartureLocationId");
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartureLocationId");
 
-                    b.ToTable("TravelPackageDepartureLocation");
+                    b.HasIndex("TravelPackageId");
+
+                    b.ToTable("TravelPackageDepartureLocations");
                 });
 
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageItinerary", b =>
                 {
-                    b.Property<Guid>("TravelPackageId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ItineraryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TravelPackageId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TravelPackageId", "ItineraryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ItineraryId");
 
-                    b.ToTable("TravelPackageItinerary");
+                    b.HasIndex("TravelPackageId");
+
+                    b.ToTable("TravelPackageItineraries");
                 });
 
             modelBuilder.Entity("TravelAgencyApplication.Domain.Model.TravelPackageTag", b =>
                 {
-                    b.Property<Guid>("TravelPackageId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TagId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TravelPackageId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TravelPackageId", "TagId");
+                    b.HasKey("Id");
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("TravelPackageTag");
+                    b.HasIndex("TravelPackageId");
+
+                    b.ToTable("TravelPackageTags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -627,7 +636,7 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasOne("TravelAgencyApplication.Domain.Model.DepartureLocation", "DepartureLocation")
                         .WithMany("TravelPackages")
                         .HasForeignKey("DepartureLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
@@ -646,7 +655,7 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasOne("TravelAgencyApplication.Domain.Model.Itinerary", "Itinerary")
                         .WithMany("TravelPackages")
                         .HasForeignKey("ItineraryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")
@@ -665,7 +674,7 @@ namespace TravelAgencyApplication.Repository.Migrations
                     b.HasOne("TravelAgencyApplication.Domain.Model.Tag", "Tag")
                         .WithMany("TravelPackages")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TravelAgencyApplication.Domain.Model.TravelPackage", "TravelPackage")

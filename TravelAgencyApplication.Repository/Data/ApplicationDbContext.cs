@@ -16,6 +16,9 @@ namespace TravelAgencyApplication.Web.Data
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<DepartureLocation> DeparatureLocations { get; set; }
         public virtual DbSet<Destination> Destinations { get; set; }
+        public virtual DbSet<TravelPackageTag> TravelPackageTags { get; set; }
+        public virtual DbSet<TravelPackageDepartureLocation> TravelPackageDepartureLocations { get; set; }
+        public virtual DbSet<TravelPackageItinerary> TravelPackageItineraries { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -25,126 +28,42 @@ namespace TravelAgencyApplication.Web.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure TravelPackage and related entities without cascade delete
+            modelBuilder.Entity<TravelPackage>()
+                .HasMany(tp => tp.DepartureLocations)
+                .WithOne(tpl => tpl.TravelPackage)
+                .HasForeignKey(tpl => tpl.TravelPackageId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TravelPackage>()
-                 .HasMany(it => it.DepartureLocations)
-                 .WithOne(it => it.TravelPackage)
-                 .HasForeignKey(it => it.TravelPackageId)
-                 .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<DepartureLocation>()
-                 .HasMany(it => it.TravelPackages)
-                 .WithOne(it => it.DepartureLocation)
-                 .HasForeignKey(it => it.DepartureLocationId)
-                 .OnDelete(DeleteBehavior.NoAction);
-
-
-            //modelBuilder.Entity<TravelPackageDepartureLocation>()
-            //    .HasOne(tpdl => tpdl.TravelPackage)
-            //    .WithMany(tp => tp.DepartureLocations)
-            //    .HasForeignKey(tpdl => tpdl.TravelPackageId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<TravelPackageDepartureLocation>()
-            //    .HasOne(tpdl => tpdl.DepartureLocation)
-            //    .WithMany(dl => dl.TravelPackages)
-            //    .HasForeignKey(tpdl => tpdl.DepartureLocationId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<TravelPackage>()
-            //    .HasMany(tp => tp.DepartureLocations)
-            //    .WithOne(tpi => tpi.TravelPackage)
-            //    .HasForeignKey(tpi => tpi.TravelPackageId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<TravelPackageDepartureLocation>()
-            //    .HasOne(tpdl => tpdl.TravelPackage)
-            //    .WithMany(tp => tp.DepartureLocations)
-            //    .HasForeignKey(tpdl => tpdl.TravelPackageId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<TravelPackage>()
-            //    .HasMany(tp => tp.DepartureLocations)
-            //    .WithOne(tpi => tpi.TravelPackage)
-            //    .HasForeignKey(tpi => tpi.TravelPackageId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-
-            //modelBuilder.Entity<TravelPackageDepartureLocation>()
-            //    .HasOne(tpdl => tpdl.DepartureLocation)
-            //    .WithMany(tp => tp.TravelPackages)
-            //    .HasForeignKey(tpdl => tpdl.DepartureLocationId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<DepartureLocation>()
-            //    .HasMany(tp => tp.TravelPackages)
-            //    .WithOne(tpi => tpi.DepartureLocation)
-            //    .HasForeignKey(tpi => tpi.DepartureLocationId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-
-            modelBuilder.Entity<TravelPackageDepartureLocation>()
-           .HasKey(tpdl => new { tpdl.TravelPackageId, tpdl.DepartureLocationId });
-
-            modelBuilder.Entity<TravelPackageDepartureLocation>()
-                .HasOne(tpdl => tpdl.DepartureLocation)
-                .WithMany(tp=>tp.TravelPackages)
-                .HasForeignKey(tpdl => tpdl.DepartureLocationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageDepartureLocation>()
-                .HasOne(tpdl => tpdl.TravelPackage)
-                .WithMany(tp => tp.DepartureLocations)
-                .HasForeignKey(tpdl => tpdl.TravelPackageId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-          .HasKey(tpi => new { tpi.TravelPackageId, tpi.ItineraryId });
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-                .HasOne(tpi => tpi.Itinerary)
-                .WithMany(tp => tp.TravelPackages)
-                .HasForeignKey(tpi => tpi.ItineraryId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-                .HasOne(tpi => tpi.TravelPackage)
-                .WithMany(tp => tp.Itineraries)
-                .HasForeignKey(tpi => tpi.TravelPackageId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-   .HasKey(tpi => new { tpi.TravelPackageId, tpi.ItineraryId });
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-                .HasOne(tpi => tpi.Itinerary)
-                .WithMany(tp => tp.TravelPackages)
-                .HasForeignKey(tpi => tpi.ItineraryId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageItinerary>()
-                .HasOne(tpi => tpi.TravelPackage)
-                .WithMany(tp => tp.Itineraries)
-                .HasForeignKey(tpi => tpi.TravelPackageId)
-                .OnDelete(DeleteBehavior.Cascade);
-            //////////////////////////////////////////////////
-            ///
-
-            modelBuilder.Entity<TravelPackageTag>()
-   .HasKey(tpt => new { tpt.TravelPackageId, tpt.TagId });
-
-            modelBuilder.Entity<TravelPackageTag>()
-                .HasOne(tpt => tpt.Tag)
-                .WithMany(tp => tp.TravelPackages)
-                .HasForeignKey(tpt => tpt.TagId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TravelPackageTag>()
-                .HasOne(tpt => tpt.TravelPackage)
-                .WithMany(tp => tp.Tags)
+                .HasMany(tp => tp.Tags)
+                .WithOne(tpt => tpt.TravelPackage)
                 .HasForeignKey(tpt => tpt.TravelPackageId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<TravelPackage>()
+                .HasMany(tp => tp.Itineraries)
+                .WithOne(tpi => tpi.TravelPackage)
+                .HasForeignKey(tpi => tpi.TravelPackageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DepartureLocation>()
+                .HasMany(dl => dl.TravelPackages)
+                .WithOne(tpl => tpl.DepartureLocation)
+                .HasForeignKey(tpl => tpl.DepartureLocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Tag>()
+                .HasMany(t => t.TravelPackages)
+                .WithOne(tpt => tpt.Tag)
+                .HasForeignKey(tpt => tpt.TagId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Itinerary>()
+                .HasMany(i => i.TravelPackages)
+                .WithOne(tpi => tpi.Itinerary)
+                .HasForeignKey(tpi => tpi.ItineraryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }

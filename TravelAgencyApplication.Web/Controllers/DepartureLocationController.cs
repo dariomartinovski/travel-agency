@@ -106,9 +106,6 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            //var dp = _departureLocationService.GetDetailsForDepartureLocation(id);
-            //dp.TravelPackages.Clear();
-            //_departureLocationService.UpdateExistingDepartureLocation(dp);
             _departureLocationService.DeleteDepartureLocation(id);
             return RedirectToAction(nameof(Index));
         }
