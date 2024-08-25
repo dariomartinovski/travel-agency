@@ -24,13 +24,17 @@ namespace TravelAgencyApplication.Repository.Implementation
         }
         public IEnumerable<TAUser> GetAll()
         {
-            return entities.Include(t => t.Reservations).ToList();
+            return entities
+                .Include(t => t.Reservations)
+                .Include("Reservations.TravelPackage")
+                .ToList();
         }
 
         public TAUser Get(string id)
         {
             return entities
                 .Include(t => t.Reservations)
+                .Include("Reservations.TravelPackage")
                 .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(TAUser entity)

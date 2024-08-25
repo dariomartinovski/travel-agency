@@ -14,7 +14,7 @@
     </dl>
 </div>
 
-@if (Model.Reservations?.Any(d => d.Date.CompareTo(DateTime.Now) > 0) == true)
+@if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) > 0) == true)
 {
     <div>
         <h4>Future Reservations</h4>
@@ -28,7 +28,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var reservation in Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) > 0))
+                @foreach (var reservation in Model.Reservations.Where(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) > 0))
                 {
                     <tr>
                         <td>@reservation.Date.ToShortDateString()</td>
@@ -50,7 +50,7 @@
     </div>
 }
 
-@if (Model.Reservations?.Any(d => d.Date.CompareTo(DateTime.Now) <= 0) == true)
+@if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) <= 0) == true)
 {
     <div>
         <h4>Past Reservations</h4>
@@ -63,7 +63,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var reservation in Model.Reservations.Where(d => d.Date.CompareTo(DateTime.Now) <= 0))
+                @foreach (var reservation in Model.Reservations.Where(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) <= 0))
                 {
                     <tr>
                         <td>@reservation.Date.ToShortDateString()</td>
