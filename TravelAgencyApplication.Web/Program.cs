@@ -1,3 +1,4 @@
+using EShop.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TravelAgencyApplication.Domain.Identity;
@@ -40,6 +41,7 @@ builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<ICountryService, CountryService>();
 builder.Services.AddTransient<ITravelPackageDepartureLocationService, TravelPackageDepartureLocationService>();
 builder.Services.AddTransient<ITravelPackageTagService, TravelPackageTagService>();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 
 var app = builder.Build();
 

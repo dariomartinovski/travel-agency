@@ -74,5 +74,10 @@ namespace TravelAgencyApplication.Repository.Implementation
         {
             return entities.Any(e => e.Id == userId);
         }
+
+        public IEnumerable<TAUser> GetAllGuides()
+        {
+            return entities.Include(t => t.Reservations).Where(t => t.UserRole == Domain.Enum.UserRole.TRAVEL_GUIDE).ToList();
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace TravelAgencyApplication.Repository.Interface
     public interface IUserRepository
     {
         IEnumerable<TAUser> GetAll();
+        IEnumerable<TAUser> GetAllGuides();
+
         TAUser Get(string id);
         void Insert(TAUser entity);
         void Update(TAUser entity);
