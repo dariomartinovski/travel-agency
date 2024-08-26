@@ -14,6 +14,7 @@ namespace TravelAgencyApplication.Domain.Model
     {
       public string? Title { get; set; }
       public string? Details { get; set; }
+     public string? ImageUrl { get; set; }
 
      public double BasePrice { get; set; }
      public DateTime DepartureDate { get; set; }

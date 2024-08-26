@@ -4,50 +4,109 @@
     ViewData["Title"] = "Travel Package Details";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<div>
-    <h4>@Model.Title</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Details</dt>
-        <dd class="col-sm-10">@Model.Details</dd>
-        <dt class="col-sm-2">Base Price</dt>
-        <dd class="col-sm-10">@Model.BasePrice</dd>
-        <dt class="col-sm-2">Departure Date</dt>
-        <dd class="col-sm-10">@Model.DepartureDate.ToShortDateString()</dd>
-        <dt class="col-sm-2">Return Date</dt>
-        <dd class="col-sm-10">@Model.ReturnDate.ToShortDateString()</dd>
-        <dt class="col-sm-2">Destination</dt>
-        <dd class="col-sm-10">@Model.Destination</dd>
-        <dt class="col-sm-2">Max Capacity</dt>
-        <dd class="col-sm-10">@Model.MaxCapacity</dd>
-        <dt class="col-sm-2">Current Capacity</dt>
-        <dd class="col-sm-10">@Model.CurrentCapacity</dd>
-        <dt class="col-sm-2">Season</dt>
-        <dd class="col-sm-10">@Model.Season</dd>
-        <dt class="col-sm-2">Transport Type</dt>
-        <dd class="col-sm-10">@Model.TransportType</dd>
-    </dl>
-</div>
-
-<div>
-    @* <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a> *@
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
-
-<div class="mt-4">
-    <form asp-action="PayOrder" asp-controller="Reservation" method="get" id="reservationForm">
-        <input type="hidden" name="travelPackageId" value="@Model.Id" />
-
-        <div class="form-group">
-            <label for="numberOfPeople">Number of People:</label>
-            <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" min="1" required />
-            <span id="error-message" class="text-danger" style="display:none;">The number of people exceeds the remaining capacity. There are only @Model.MaxCapacity places left.</span>
+    <div class="row">
+        <div class="col-md-4">
+            @if (Model.ImageUrl != null)
+            {
+                <img src="@Model.ImageUrl" class="card-img-top" alt="Travel Package Image">
+            }
+            else
+            {
+                <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="Travel Package Image">
+            }
         </div>
+        <div class="col-md-8">
+            <h3>@Model.Title</h3>
+            <p><strong>Starting from:</strong> $@Model.BasePrice</p>
+            <p><strong>Departure Date:</strong> @Model.DepartureDate.ToShortDateString()</p>
+            <p><strong>Return Date:</strong> @Model.ReturnDate.ToShortDateString()</p>
+            <p><strong>Destination:</strong> @Model.Destination?.ToString()</p>
+            <p>
+                <strong>Transport Type:</strong>
+                <i class="fa @(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "fa-bus" :
+                             Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "fa-plane" :
+                             Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "fa-ship" : "")"></i>
+               @(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "Bus" :
+                    Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "Airplane" :
+                    Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "Ship" : "")
+            <p>
+            <p>
+                <strong>Season:</strong>
+                <i class="fa @(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SPRING ? "fa-seedling" :
+                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER ? "fa-umbrella-beach" :
+                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN ? "fa-leaf" :
+                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER ? "fa-snowflake" : "")"></i>
+                        @Model.Season.ToString().ToLowerInvariant().First().ToString().ToUpperInvariant()@Model.Season.ToString().ToLowerInvariant().Substring(1)
+            </p>
+        </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary mt-2">Make a Reservation</button>
-    </form>
+    <hr />
+
+    <div>
+        <h4>Description</h4>
+        <p>@Model.Details</p>
+    </div>
+
+    <div>
+        <h4>What's Included in the Price</h4>
+        <ul>
+            <li>Three meals a day</li>
+            <li>Accommodation in 4-star hotels</li>
+            <li>Guided city tours</li>
+            <li>Transport within the destination</li>
+        </ul>
+    </div>
+
+    <div>
+        <h4>What's Not Included in the Price</h4>
+        <ul>
+            @foreach (var itinerary in Model.Itineraries)
+            {
+                <li>
+                    <b>@itinerary.Itinerary.Title</b> - $@itinerary.Itinerary.Price on @itinerary.Itinerary.Date.ToShortDateString()
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div>
+        <h4>Additional Information</h4>
+        <ul>
+            <li>Reservation is made with a 30% deposit of the total amount.</li>
+            <li>Full payment is required 15 days before the start of the trip.</li>
+            <li>Prices are quoted in euros and must be paid in Macedonian denars at the rate of 1 euro = 62 MKD.</li>
+            <li>At least 20 participants are required for the trip to take place.</li>
+            <li>A passport valid for at least 90 days after the end of the trip is required.</li>
+            <li>The organizer reserves the right to change the price due to changes in transportation or hotel costs.</li>
+            <li>In case of insufficient number of participants, the organizer reserves the right to cancel the trip up to 5 days before the start date.</li>
+            <li>The organizer reserves the right to change the prices of optional excursions if there is a change in the ticket prices for local sites and museums.</li>
+            <li>During city tours mentioned in the program, visits to public buildings, institutions, or cultural monuments are not included unless specifically stated in the program.</li>
+            <li>The organizer reserves the right to change the order of program realization.</li>
+            <li>The organizer retains the right to modify the travel program in case of unforeseen objective reasons such as border delays, flight delays, traffic congestion, or closure of a site planned for visit.</li>
+        </ul>
+    </div>
+
+    <div class="mt-4">
+        <form asp-action="PayOrder" asp-controller="Reservation" method="get" id="reservationForm">
+            <input type="hidden" name="travelPackageId" value="@Model.Id" />
+
+            <div class="form-group">
+                <label for="numberOfPeople">Number of People:</label>
+                <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" min="1" required />
+                <span id="error-message" class="text-danger" style="display:none;">The number of people exceeds the remaining capacity. There are only @Model.MaxCapacity places left.</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Make a Reservation</button>
+        </form>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

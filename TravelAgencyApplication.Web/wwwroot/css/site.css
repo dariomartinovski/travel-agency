@@ -1,22 +1,117 @@
 html {
-  font-size: 14px;
+    font-size: 0.875em;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 1em;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+/*  25 143 113*/
+
+:root {
+    --dark-color: #20232e;
+    --green-color: #198F71;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    color: #20232e;
 }
+
+nav{
+    padding: 0 3em;
+}
+
+.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-right {
+    margin-left: auto;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #FF6F00;
+}
+
+.navbar-nav .nav-link {
+    color: #000;
+    font-weight: 500;
+    margin-right: 1rem;
+    position: relative;
+    padding-bottom: 0.4em;
+}
+
+.navbar-nav .nav-link.active {
+    color: #FF6F00;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link i {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0.1em;
+    background-color: var(--green-color);
+    transition: width 0.3s ease;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar-nav .nav-link.active::after {
+    width: 100%;
+}
+
+@media (max-width: 67em) {
+    .navbar-center {
+        position: static;
+        transform: none;
+        text-align: center;
+    }
+
+    .navbar-right {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .navbar-collapse {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+

@@ -11,6 +11,5 @@ namespace TravelAgencyApplication.Domain.Enum
         BUS,
         AIRPLANE,
         BOAT,
-
     }
 }

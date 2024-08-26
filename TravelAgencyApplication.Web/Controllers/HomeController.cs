@@ -4,6 +4,9 @@ using TravelAgencyApplication.Domain.Enum;
 using TravelAgencyApplication.Service.Interface;
 using TravelAgencyApplication.Web.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using TravelAgencyApplication.Service.Implementation;
+using TravelAgencyApplication.Domain.Model;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
@@ -11,20 +14,28 @@ namespace TravelAgencyApplication.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUserService _userService;
+        private readonly ITravelPackageService _travelPackageService;
 
-
-        public HomeController(ILogger<HomeController> logger, IUserService userService)
+        public HomeController(ITravelPackageService travelPackageService, ILogger<HomeController> logger, IUserService userService)
         {
             _logger = logger;
             _userService = userService;
+            _travelPackageService = travelPackageService;
+
         }
 
         public IActionResult Index()
         {
-            var userId = User.Identity.GetUserId();
-            var currentUser = _userService.GetDetailsForTAUser(userId);
-           
-            return View(currentUser);
+            //var userId = User.Identity.GetUserId();
+            //var currentUser = _userService.GetDetailsForTAUser(userId);
+
+            //var homeView = new HomeViewModel
+            //{
+            //    user = currentUser,
+            //};
+
+            List<TravelPackage> TravelPackages = _travelPackageService.GetAllTravelPackages().Take(8).ToList();
+            return View(TravelPackages);
         }
 
         public IActionResult Privacy()

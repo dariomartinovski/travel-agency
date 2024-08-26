@@ -33,7 +33,8 @@ namespace TravelAgencyApplication.Repository.Implementation
                 .Include("DepartureLocations.DepartureLocation")
                 .Include(t => t.Tags)
                 .Include("Tags.Tag")
-                .Include(t => t.Guide).ToList();
+                .Include(t => t.Guide)
+                .ToList();
         }
 
         public TravelPackage Get(Guid? id)

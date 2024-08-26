@@ -2,9 +2,20 @@
 
 @{
     ViewData["Title"] = "Travel Packages";
+
+    string TruncateText(string text, int maxWords)
+    {
+        var words = text.Split(' ');
+        if (words.Length <= maxWords)
+        {
+            return text;
+        }
+
+        return string.Join(" ", words.Take(maxWords)) + "...";
+    }
 }
 
-<h1>@ViewData["Title"]</h1>
+<h2 class="mt-4 mb-3">@ViewData["Title"]</h2>
 
 <table class="table">
     <thead>
@@ -27,7 +38,7 @@
         {
             <tr>
                 <td>@package.Title</td>
-                <td>@package.Details</td>
+                <td>@TruncateText(package.Details, 10)</td>
                 <td>@package.BasePrice.ToString("C")</td>
                 <td>@package.DepartureDate.ToShortDateString()</td>
                 <td>@package.ReturnDate.ToShortDateString()</td>

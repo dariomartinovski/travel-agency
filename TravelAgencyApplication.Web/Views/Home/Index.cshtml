@@ -1,17 +1,72 @@
-﻿@model TravelAgencyApplication.Domain.Identity.TAUser;
+﻿@model List<TravelAgencyApplication.Domain.Model.TravelPackage>;
 
 @{
     ViewData["Title"] = "Home Page";
+
+    string TruncateText(string text, int maxWords)
+    {
+        var words = text.Split(' ');
+        if (words.Length <= maxWords)
+        {
+            return text;
+        }
+
+        return string.Join(" ", words.Take(maxWords)) + "...";
+    }
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Travel Agency Application</h1>
-    @if(Model != null)
-    {
-        @if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
+<div id="landingSection">
+    <img src="~/images/background-image.jpg" alt="Background image" class="backgroundImage"/>
+    <div class="overlay"></div>
+    <div class="customerContainer">
+        <h1>Discover</h1>
+        <h3>New Destinations</h3>
+        <p>Your gateway to unforgettable journeys, simplifying every step of your travel experience</p>
+        <button class="primaryButton">See offers</button>
+    </div>
+</div>
+<div id="beachSection">
+    <img src="~/images/lefkada-beach.jpg" alt="Beach" />
+    <div>
+        <h1>
+            We will help you and your family have the time of your lives
+        </h1>
+        <p>
+            At <b>Voyage Vista</b>, we’re dedicated to making your family vacations unforgettable. Our expert team is committed to crafting personalized itineraries that cater to your unique needs and preferences. 
+        </p>
+        <p>
+            With our seamless booking process and exceptional customer service, you can relax and enjoy every moment of your adventure, knowing that every detail is taken care of.
+        </p>
+    </div>
+</div>
+    
+<div id="featuredTravelPackages" class="container">
+    <h1>Featured travel packages</h1>
+    <div class="row">
+        @foreach (var item in Model)
         {
-            <p>Do you want to become travel guide?</p>
-            <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    @if (item.ImageUrl != null)
+                    {
+                        <img src="@item.ImageUrl" class="card-img-top" alt="Travel Package Image">
+                    }
+                    else
+                    {
+                        <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="Travel Package Image">
+                    }                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">@TruncateText(item.Details, 10)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">@item.Destination?.ToString()</span>
+                            <span class="font-weight-bold text-muted">Starting from <b>$@item.BasePrice</b></span>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="TravelPackage" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-    }
+    </div>
 </div>

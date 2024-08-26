@@ -98,7 +98,7 @@ namespace TravelAgencyApplication.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Admin/[controller]/Create")]
-        public IActionResult Create([Bind("Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
+        public IActionResult Create([Bind("Title, Details, ImageUrl, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +110,7 @@ namespace TravelAgencyApplication.Web.Controllers
                 {
                     Id = Guid.NewGuid(),
                     Title = travelPackageDto.Title,
+                    ImageUrl = travelPackageDto.ImageUrl,
                     Details = travelPackageDto.Details,
                     BasePrice = travelPackageDto.BasePrice,
                     DepartureDate = travelPackageDto.DepartureDate,
@@ -191,6 +192,7 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 Id = travelPackage.Id,
                 Title = travelPackage.Title,
+                ImageUrl = travelPackage.ImageUrl,
                 Details = travelPackage.Details,
                 BasePrice = travelPackage.BasePrice,
                 DepartureDate = travelPackage.DepartureDate,
@@ -213,7 +215,7 @@ namespace TravelAgencyApplication.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Admin/[controller]/Edit/{id}")]
-        public IActionResult Edit(Guid id, [Bind("Id, Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
+        public IActionResult Edit(Guid id, [Bind("Id, Title, Details, ImageUrl, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
             if (id != travelPackageDto.Id)
             {
@@ -276,6 +278,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
                         package.Title = travelPackageDto.Title;
                         package.Details = travelPackageDto.Details;
+                        package.ImageUrl = travelPackageDto.ImageUrl;
                         package.BasePrice = travelPackageDto.BasePrice;
                         package.DepartureDate = travelPackageDto.DepartureDate;
                         package.ReturnDate = travelPackageDto.ReturnDate;

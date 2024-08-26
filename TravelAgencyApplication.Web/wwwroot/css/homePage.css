@@ -1,0 +1,95 @@
+﻿#landingSection{
+    margin-top: 1em;
+    border-radius: 1em;
+    width: 100%;
+    min-height: 85vh;
+    position: relative;
+}
+#landingSection .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    z-index: -2;    
+}
+
+#landingSection .backgroundImage {
+    object-fit: cover;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 1em;
+    overflow: hidden;
+    z-index: -4;
+}
+#landingSection .customerContainer{
+    padding: 12em 0 0 10em;
+    backdrop-filter: blur(0.2em);
+    display: inline-block;
+}
+#landingSection .customerContainer h1{
+    font-size: 5em;
+    font-weight: 800;
+}
+#landingSection .customerContainer h3 {
+    font-size: 3em;
+    font-weight: 600;
+}
+#landingSection .customerContainer p {
+    margin-top: 2em;
+    width: 45ch;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+#landingSection .primaryButton {
+    margin-top: 2em;
+    padding: 0.5em 1.5em;
+    background: transparent;
+    border-radius: 1em;
+    font-size: 1em;
+    font-weight: bold;
+    border: 0.2em solid var(--dark-color);
+    transition: background-color 200ms ease;
+}
+#landingSection .primaryButton:hover {
+    background-color: rgba(200, 200, 200, 0.3);
+    box-shadow: 0 0 1em rgba(255,255,255, 0.2);
+}
+
+
+#beachSection{
+    margin-top: 5em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 60vh;
+}
+
+#beachSection img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+}
+#beachSection div{
+    padding: 4em 4em 0;
+}
+
+#beachSection div h1{
+    font-weight: 700;
+}
+
+#beachSection div p:first-of-type {
+    margin-top: 2em;
+}
+#beachSection div p{
+    font-size: 1.1em;
+}
+
+#featuredTravelPackages {
+    margin-top: 4em;
+}
+#featuredTravelPackages h1 {
+    margin-bottom: 0.7em;
+    font-weight: 700;
+}

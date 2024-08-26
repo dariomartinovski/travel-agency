@@ -1,5 +1,20 @@
 ﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.TravelPackage>
 
+@{
+    ViewData["Title"] = "Travel Packages";
+
+    string TruncateText(string text, int maxWords)
+    {
+        var words = text.Split(' ');
+        if (words.Length <= maxWords)
+        {
+            return text;
+        }
+
+        return string.Join(" ", words.Take(maxWords)) + "...";
+    }
+}
+
 <div id="TravelPackagesSection" class="admin-section">
     <h2>Travel packages</h2>
     <table class="table">
@@ -25,7 +40,7 @@
             {
                 <tr>
                     <td>@package.Title</td>
-                    <td>@package.Details</td>
+                    <td>@TruncateText(package.Details, 10)</td>
                     <td>@package.BasePrice.ToString("C")</td>
                     <td>@package.DepartureDate.ToShortDateString()</td>
                     <td>@package.ReturnDate.ToShortDateString()</td>

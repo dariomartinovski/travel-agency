@@ -15,7 +15,7 @@ namespace TravelAgencyApplication.Domain.DTO
         public Guid Id { get; set; }
         public string? Title { get; set; }
         public string? Details { get; set; }
-
+        public string? ImageUrl { get; set; }
         public double BasePrice { get; set; }
         public DateTime DepartureDate { get; set; }
         public DateTime ReturnDate { get; set; }
