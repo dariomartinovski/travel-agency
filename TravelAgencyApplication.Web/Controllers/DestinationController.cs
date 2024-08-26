@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
@@ -11,18 +12,24 @@ namespace TravelAgencyApplication.Web.Controllers
         private readonly IDestinationService _destinationService;
         private readonly ICountryService _countryService;
         private readonly ICityService _cityService;
+        private readonly AuthorizationService _authorizationService;
 
-        public DestinationController(IDestinationService destinationService, ICountryService countryService, ICityService cityService)
+        public DestinationController(IDestinationService destinationService, ICountryService countryService, ICityService cityService, AuthorizationService authorizationService)
         {
             _destinationService = destinationService;
             _countryService = countryService;
             _cityService = cityService;
+            _authorizationService = authorizationService;
         }
 
         [Route("")]
         [Route("Index")]
         public IActionResult Index()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var destinations = _destinationService.GetAllDestinations();
             return View(destinations);
         }
@@ -30,6 +37,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             ViewBag.CountryList = new SelectList(_countryService.GetAllCountries(), "Id", "Name");
             ViewBag.CityList = new SelectList(_cityService.GetAllCities(), "Id", "Name");
             return View();
@@ -40,6 +51,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("CountryId,CityId")] Destination destination)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _destinationService.CreateNewDestination(destination);
@@ -57,7 +72,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var destination = _destinationService.GetDetailsForDestination(id);
             if (destination == null)
             {
@@ -77,7 +95,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _destinationService.UpdateExistingDestination(destination);
@@ -96,6 +117,11 @@ namespace TravelAgencyApplication.Web.Controllers
                 return NotFound();
             }
 
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
             var destination = _destinationService.GetDetailsForDestination(id);
             if (destination == null)
             {
@@ -110,6 +136,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             _destinationService.DeleteDestination(id);
             return RedirectToAction(nameof(Index));
         }

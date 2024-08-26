@@ -1,0 +1,109 @@
+﻿@model TravelAgencyApplication.Domain.Identity.TAUser
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">@ViewData["Title"]</h2>
+
+    <div class="card mt-4 mb-4">
+        <div class="row g-0 justify-content-center">
+            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center p-4">
+                <img src="~/images/profile-picture.jpg" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
+                <h4 class="text-center">@Model.FirstName @Model.LastName</h4>
+                <p class="text-center text-muted">@Model.UserName</p>
+                <p class="text-center text-muted">@Model.PhoneNumber</p>
+                <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Edit Profile</a>
+            </div>
+        
+            </div>
+        </div>
+
+    <div>
+       
+    </div>
+    </div>
+
+    @if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) > 0) == true)
+    {
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Future Reservations</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reservation in Model.Reservations.Where(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) > 0))
+                        {
+                            <tr>
+                                <td>@reservation.Date.ToShortDateString()</td>
+                                <td>@reservation.TotalPrice.ToString("C")</td>
+                                <td>
+                                    @if (reservation.HasPaid)
+                                    {
+                                        <span class="text-success">Paid</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Not Paid</span>
+                                    }
+                                </td>
+                                <td><a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    @if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) <= 0) == true)
+    {
+        <div class="card mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">Past Reservations</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Total Price</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reservation in Model.Reservations.Where(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) <= 0))
+                        {
+                            <tr>
+                                <td>@reservation.Date.ToShortDateString()</td>
+                                <td>@reservation.TotalPrice.ToString("C")</td>
+                                <td><a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+@if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
+{
+    <div class="mt-4 text-center">
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Go to Admin Panel</a>
+    </div>
+
+}
+  
+</div>

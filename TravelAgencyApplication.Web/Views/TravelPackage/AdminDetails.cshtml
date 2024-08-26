@@ -10,28 +10,93 @@
     <h4>@Model.Title</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">Title</dt>
+        <dd class="col-sm-10">@Model.Title</dd>
+
         <dt class="col-sm-2">Details</dt>
         <dd class="col-sm-10">@Model.Details</dd>
+
         <dt class="col-sm-2">Base Price</dt>
-        <dd class="col-sm-10">@Model.BasePrice</dd>
+        <dd class="col-sm-10">@Model.BasePrice.ToString("C")</dd>
+
         <dt class="col-sm-2">Departure Date</dt>
         <dd class="col-sm-10">@Model.DepartureDate.ToShortDateString()</dd>
+
         <dt class="col-sm-2">Return Date</dt>
         <dd class="col-sm-10">@Model.ReturnDate.ToShortDateString()</dd>
+
         <dt class="col-sm-2">Destination</dt>
-        <dd class="col-sm-10">@Model.Destination</dd>
+        <dd class="col-sm-10">@Model.Destination?.ToString()</dd>
+
         <dt class="col-sm-2">Max Capacity</dt>
         <dd class="col-sm-10">@Model.MaxCapacity</dd>
+
         <dt class="col-sm-2">Current Capacity</dt>
         <dd class="col-sm-10">@Model.CurrentCapacity</dd>
+
         <dt class="col-sm-2">Season</dt>
         <dd class="col-sm-10">@Model.Season</dd>
+
         <dt class="col-sm-2">Transport Type</dt>
         <dd class="col-sm-10">@Model.TransportType</dd>
+
+        <dt class="col-sm-2">Guide</dt>
+        <dd class="col-sm-10">@Model.Guide?.FirstName @Model.Guide?.LastName</dd>
+
+        <dt class="col-sm-2">Tags</dt>
+        @if(Model.Tags.Count() == 0)
+        {
+            <dd class="col-sm-10">/</dd>
+        }
+        else
+        {
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var tag in Model.Tags)
+                {
+                    <li>@tag.Tag.Name</li>
+                }
+            </ul>
+        </dd>
+        }
+        <dt class="col-sm-2">Itineraries</dt>
+        @if(Model.Itineraries.Count() == 0)
+        {
+            <dd class="col-sm-10">/</dd>
+        }
+        else
+        {
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var itinerary in Model.Itineraries)
+                {
+                    <li>@itinerary.Itinerary.Title</li>
+                }
+            </ul>
+        </dd>
+        }
+
+        <dt class="col-sm-2">Departure Locations</dt>
+        @if(Model.DepartureLocations.Count() == 0)
+        {
+            <dd class="col-sm-10">/</dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <ul>
+                    @foreach (var location in Model.DepartureLocations)
+                    {
+                        <li>@location.DepartureLocation.ToString()</li>
+                    }
+                </ul>
+            </dd>
+        }
+       
     </dl>
 </div>
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="AdminIndex" class="btn btn-secondary">Back to List</a>
 </div>

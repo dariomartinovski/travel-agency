@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
@@ -8,16 +9,22 @@ namespace TravelAgencyApplication.Web.Controllers
     public class TagController : Controller
     {
         private readonly ITagService _tagService;
+        private readonly AuthorizationService _authorizationService;
 
-        public TagController(ITagService tagService)
+        public TagController(ITagService tagService, AuthorizationService authorizationService)
         {
             _tagService = tagService;
+            _authorizationService = authorizationService;
         }
 
         [Route("")]
         [Route("Index")]
         public IActionResult Index()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var tags = _tagService.GetAllTags();
             return View(tags);
         }
@@ -25,6 +32,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             return View();
         }
 
@@ -33,6 +44,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name")] Tag tag)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _tagService.CreateNewTag(tag);
@@ -44,11 +59,15 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Edit/{id?}")]
         public IActionResult Edit(Guid? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var tag = _tagService.GetDetailsForTag(id);
             if (tag == null)
             {
@@ -66,7 +85,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _tagService.UpdateExistingTag(tag);
@@ -82,7 +104,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var tag = _tagService.GetDetailsForTag(id);
             if (tag == null)
             {
@@ -97,6 +122,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             _tagService.DeleteTag(id);
             return RedirectToAction(nameof(Index));
         }

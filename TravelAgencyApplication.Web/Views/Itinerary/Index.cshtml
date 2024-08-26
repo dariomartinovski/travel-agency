@@ -27,7 +27,7 @@
                 <td>@itinerary.Destination?.ToString()</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@itinerary.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Details" asp-route-id="@itinerary.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@itinerary.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@itinerary.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>

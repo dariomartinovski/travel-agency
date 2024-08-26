@@ -103,7 +103,7 @@ public class RegisterModel : PageModel
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
             user.PhoneNumber = Input.PhoneNumber;
-            user.UserRole = Input.UserRole;
+            user.UserRole = TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER;
 
             var result = await _userManager.CreateAsync(user, Input.Password);
 

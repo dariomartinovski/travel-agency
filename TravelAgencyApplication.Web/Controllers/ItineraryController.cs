@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
@@ -10,11 +11,13 @@ namespace TravelAgencyApplication.Web.Controllers
     {
         private readonly IItineraryService _itineraryService;
         private readonly IDestinationService _destinationService;
+        private readonly AuthorizationService _authorizationService;
 
-        public ItineraryController(IItineraryService itineraryService, IDestinationService destinationService)
+        public ItineraryController(IItineraryService itineraryService, IDestinationService destinationService, AuthorizationService authorizationService)
         {
             _itineraryService = itineraryService;
             _destinationService = destinationService;
+            _authorizationService = authorizationService;
         }
 
         // GET: Itinerary/Index
@@ -22,6 +25,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Index")]
         public IActionResult Index()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var itineraries = _itineraryService.GetAllItineraries();
             return View(itineraries);
         }
@@ -30,6 +37,14 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Details/{id?}")]
         public IActionResult Details(Guid id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
             if (itinerary == null)
             {
@@ -40,16 +55,24 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             List<Destination> destinations = _destinationService.GetAllDestinations();
             ViewBag.DestinationList = new SelectList(destinations, "Id", null);
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Create")]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Itinerary itinerary)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _itineraryService.CreateNewItinerary(itinerary);
@@ -61,6 +84,14 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Edit/{id?}")]
         public IActionResult Edit(Guid id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
             if (itinerary == null)
             {
@@ -80,6 +111,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
 
             if (ModelState.IsValid)
             {
@@ -93,6 +128,14 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Delete/{id?}")]
         public IActionResult Delete(Guid id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var itinerary = _itineraryService.GetDetailsForItinerary(id);
             if (itinerary == null)
             {
@@ -106,6 +149,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             _itineraryService.DeleteItinerary(id);
             return RedirectToAction(nameof(Index));
         }
