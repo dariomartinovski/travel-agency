@@ -54,17 +54,6 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.UserRole" class="control-label"></label>
-                <select asp-for="Input.UserRole" class="form-control">
-                    <option value="0">Admin</option>
-                    <option value="1">Travel Guide</option>
-                    <option value="2">Customer</option>
-                </select>
-                <span asp-validation-for="Input.UserRole" class="text-danger"></span>
-            </div>
-
-
 
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
