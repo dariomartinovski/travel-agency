@@ -224,7 +224,6 @@ namespace TravelAgencyApplication.Web.Controllers
             return users;
         }
 
-        [Route("MakeTouristGuide")]
         public IActionResult MakeTouristGuide(string id)
         {
             if (id == null)
@@ -242,7 +241,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
             _userService.UpdateExistingTAUser(user);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyProfile));
         }
 
     }

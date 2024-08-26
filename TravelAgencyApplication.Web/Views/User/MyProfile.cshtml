@@ -105,5 +105,13 @@
     </div>
 
 }
+@if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
+{
+    <div class="mt-4 text-center">
+        <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-secondary">Become a tourist guide</a>
+    </div>
+
+}
+
   
 </div>
