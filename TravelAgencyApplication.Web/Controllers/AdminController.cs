@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelAgencyApplication.Domain.DTO;
+using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
@@ -14,8 +15,8 @@ namespace TravelAgencyApplication.Web.Controllers
         private readonly ITagService _tagService;
         private readonly ITravelPackageService _travelPackageService;
         private readonly IUserService _userService;
-
-        public AdminController(ICityService cityService, ICountryService countryService, IDepartureLocationService departureLocationService, IDestinationService destinationService, IItineraryService itineraryService, ITagService tagService, ITravelPackageService travelPackageService, IUserService userService)
+        private readonly AuthorizationService _authorizationService;
+        public AdminController(ICityService cityService, ICountryService countryService, IDepartureLocationService departureLocationService, IDestinationService destinationService, IItineraryService itineraryService, ITagService tagService, ITravelPackageService travelPackageService, IUserService userService, AuthorizationService authorizationService)
         {
             _cityService = cityService;
             _countryService = countryService;
@@ -25,10 +26,15 @@ namespace TravelAgencyApplication.Web.Controllers
             _tagService = tagService;
             _travelPackageService = travelPackageService;
             _userService = userService;
+            _authorizationService = authorizationService;
         }
 
         public IActionResult Index()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var model = new AdminPageDTO
             {
                 Cities = _cityService.GetAllCities(),

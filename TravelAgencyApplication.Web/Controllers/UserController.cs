@@ -9,35 +9,28 @@ using Newtonsoft.Json;
 using System.Text;
 using ExcelDataReader;
 using TravelAgencyApplication.Domain.DTO;
-using TravelAgencyApplication.Domain.Model;
-using System.Configuration;
+
+using TravelAgencyApplication.Service.Implementation;
 
 namespace TravelAgencyApplication.Web.Controllers
 {
-    [Route("Admin/[controller]")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly AuthorizationService _authorizationService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, AuthorizationService authorizationService)
         {
             _userService = userService;
+            _authorizationService = authorizationService;
         }
-        [Route("")]
-        [Route("Index")]
+        [Route("Admin/[controller]/Index")]
+        [Route("Admin/[controller]")]
         public IActionResult Index()
         {
-            var userId = User.Identity.GetUserId();
-            // Fetch the current user's user details
-            if(userId == null)
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
             {
                 return Redirect("/Identity/Account/Login");
-            }
-            var currentUser = _userService.GetDetailsForTAUser(userId);
-            if(currentUser.UserRole != UserRole.ADMIN)
-            {
-                return Redirect("/Identity/Account/Login");
-
             }
             List<TAUser> users = _userService.GetAllTAUsers().ToList(); 
 
@@ -48,39 +41,37 @@ namespace TravelAgencyApplication.Web.Controllers
 
             return View(viewModel);
         }
-
-        [Route("Details/{id?}")]
+        [Route("Admin/[controller]/Details/{id?}")]
         public async Task<IActionResult> Details(string? id)
         {
-            if (!User.Identity.IsAuthenticated)
+            
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
             {
-                return Unauthorized();
+                return Redirect("/Identity/Account/Login");
             }
-
             if (id == null)
             {
                 return NotFound();
             }
-
             var user = _userService.GetDetailsForTAUser(id);
-            if (user == null)
+
+            return View(user);
+        }
+        public async Task<IActionResult> MyProfile()
+        {
+            if (!User.Identity.IsAuthenticated)
             {
-                return NotFound();
+                return Redirect("/Identity/Account/Login");
             }
 
-
+          
             var userId = User.Identity.GetUserId();
 
             var currentUser = _userService.GetDetailsForTAUser(userId);
-
-            if (userId != id && currentUser.UserRole != UserRole.ADMIN)
-            {
-                return Forbid();
-            }
-            return View(user);
+            return View(currentUser);
         }
 
-        [Route("Edit/{id?}")]
+        [Route("Admin/[controller]/Edit/{id?}")]
         public IActionResult Edit(string? id)
         {
 
@@ -88,7 +79,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var user = _userService.GetDetailsForTAUser(id);
             if (user == null)
             {
@@ -100,14 +94,18 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Edit/{id}")]
+        [Route("Admin/[controller]/Edit/{id}")]
         public IActionResult Edit(string id, [Bind("Id,FirstName,LastName,PhoneNumber")] TAUser user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+            
             if (ModelState.IsValid)
             {
                 try
@@ -126,12 +124,17 @@ namespace TravelAgencyApplication.Web.Controllers
 
 
         // GET: TAUsers/Delete/5
-        [Route("Delete/{id?}")]
+        [Route("Admin/[controller]/Delete/{id?}")]
+
         public IActionResult Delete(string? id)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
             }
 
             var user = _userService.GetDetailsForTAUser(id);
@@ -145,9 +148,14 @@ namespace TravelAgencyApplication.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Route("Delete/{id?}")]
+        [Route("Admin/[controller]/Delete/{id?}")]
         public IActionResult DeleteConfirmed(string id)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
             var user = _userService.GetDetailsForTAUser(id);
             if (user == null)
             {
@@ -160,9 +168,12 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("ImportUsers")]
         public IActionResult ImportUsers(IFormFile file)
         {
-            Console.WriteLine(Directory.GetCurrentDirectory());
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             string pathToUpload = $"{Directory.GetCurrentDirectory()}\\{file.FileName}";
-            Console.WriteLine(pathToUpload);
+
             using (FileStream fileStream = System.IO.File.Create(pathToUpload))
             {
                 file.CopyTo(fileStream);
@@ -185,6 +196,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         private List<UserRegistrationDTO> getAllUsersFromFile(string fileName)
         {
+
             List<UserRegistrationDTO> users = new List<UserRegistrationDTO>();
             string filePath = $"{Directory.GetCurrentDirectory()}\\{fileName}";
 

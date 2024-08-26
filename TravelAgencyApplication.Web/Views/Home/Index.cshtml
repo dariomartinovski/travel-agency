@@ -10,8 +10,18 @@
     {
         @if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.CUSTOMER)
         {
-            <p>Do you want to become travel guide?</p>
-            <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+            <div class="mt-3">
+                <p>Do you want to become travel guide?</p>
+                <a asp-controller="User" asp-action="MakeTouristGuide" asp-route-id="@Model.Id" class="btn btn-success">You are one click away</a>
+            </div>
         }
+
+        @if (Model.UserRole == TravelAgencyApplication.Domain.Enum.UserRole.ADMIN)
+        {
+            <div class="mt-5">
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Admin Panel</a>
+            </div>
+        }
+
     }
 </div>

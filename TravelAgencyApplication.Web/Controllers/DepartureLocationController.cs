@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 
 namespace TravelAgencyApplication.Web.Controllers
@@ -11,18 +12,24 @@ namespace TravelAgencyApplication.Web.Controllers
         private readonly IDepartureLocationService _departureLocationService;
         private readonly ITravelPackageDepartureLocationService _travelPackageDepartureLocationService;
         private readonly ICityService _cityService;
+        private readonly AuthorizationService _authorizationService;
 
-        public DepartureLocationController(IDepartureLocationService departureLocationService, ICityService cityService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService)
+        public DepartureLocationController(IDepartureLocationService departureLocationService, ICityService cityService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService, AuthorizationService authorizationService)
         {
             _departureLocationService = departureLocationService;
             _cityService = cityService;
             _travelPackageDepartureLocationService = travelPackageDepartureLocationService;
+            _authorizationService = authorizationService;
         }
 
         [Route("")]
         [Route("Index")]
         public IActionResult Index()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var departureLocations = _departureLocationService.GetAllDepartureLocations();
             return View(departureLocations);
         }
@@ -30,6 +37,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             ViewBag.CityList = new SelectList(_cityService.GetAllCities(), "Id", "Name");
             return View();
         }
@@ -39,6 +50,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("CityId,Location,DepartureTime")] DepartureLocation departureLocation)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _departureLocationService.CreateNewDepartureLocation(departureLocation);
@@ -54,6 +69,10 @@ namespace TravelAgencyApplication.Web.Controllers
             if (id == null)
             {
                 return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
             }
 
             var departureLocation = _departureLocationService.GetDetailsForDepartureLocation(id);
@@ -74,7 +93,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 _departureLocationService.UpdateExistingDepartureLocation(departureLocation);
@@ -92,6 +114,11 @@ namespace TravelAgencyApplication.Web.Controllers
                 return NotFound();
             }
 
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
             var departureLocation = _departureLocationService.GetDetailsForDepartureLocation(id);
             if (departureLocation == null)
             {
@@ -106,6 +133,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             _departureLocationService.DeleteDepartureLocation(id);
             return RedirectToAction(nameof(Index));
         }

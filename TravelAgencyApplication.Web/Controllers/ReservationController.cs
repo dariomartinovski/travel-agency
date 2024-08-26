@@ -106,8 +106,8 @@ namespace TravelAgencyApplication.Web.Controllers
                 };
 
                 _reservationService.CreateNewReservation(reservation);
-                int maxCapacity = travelPackage.MaxCapacity - reservation.NumberOfPeople;
-                travelPackage.MaxCapacity = maxCapacity;
+                int currentCapacity = travelPackage.CurrentCapacity - reservation.NumberOfPeople;
+                travelPackage.CurrentCapacity = currentCapacity;
                 _travelPackageService.UpdateExistingTravelPackage(travelPackage);
 
                 return RedirectToAction("SuccessPayment");

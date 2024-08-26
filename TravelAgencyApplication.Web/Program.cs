@@ -1,6 +1,7 @@
 using EShop.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Repository.Implementation;
 using TravelAgencyApplication.Repository.Interface;
@@ -42,7 +43,9 @@ builder.Services.AddTransient<ICountryService, CountryService>();
 builder.Services.AddTransient<ITravelPackageDepartureLocationService, TravelPackageDepartureLocationService>();
 builder.Services.AddTransient<ITravelPackageTagService, TravelPackageTagService>();
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
+builder.Services.AddScoped<AuthorizationService>();
 
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

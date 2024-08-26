@@ -24,8 +24,9 @@ namespace TravelAgencyApplication.Web.Controllers
         private readonly IItineraryService _itineraryService;
         private readonly IDepartureLocationService _departureLocationService;
         private readonly ITagService _tagService;
+        private readonly AuthorizationService _authorizationService;
 
-        public TravelPackageController(ITravelPackageTagService travelPackageTagService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService, ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService)
+        public TravelPackageController(ITravelPackageTagService travelPackageTagService, ITravelPackageDepartureLocationService travelPackageDepartureLocationService, ITravelPackageItineraryService travelPackageItineraryService, ITravelPackageService travelPackageService, IUserService userService, IDepartureLocationService departureLocationService, IItineraryService itineraryService, IDestinationService destinationService, ITagService tagService, AuthorizationService authorizationService)
         {
             _travelPackageService = travelPackageService;
             _userService = userService;
@@ -36,6 +37,7 @@ namespace TravelAgencyApplication.Web.Controllers
             _travelPackageItineraryService = travelPackageItineraryService;
             _travelPackageDepartureLocationService = travelPackageDepartureLocationService;
             _travelPackageTagService = travelPackageTagService;
+            _authorizationService = authorizationService;
         }
 
         public IActionResult Index()
@@ -63,6 +65,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Index")]
         public IActionResult AdminIndex()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var travelPackages = _travelPackageService.GetAllTravelPackages();
             return View(travelPackages);
 
@@ -74,6 +80,10 @@ namespace TravelAgencyApplication.Web.Controllers
             if (id == null)
             {
                 return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
             }
 
             var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
@@ -87,6 +97,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Create")]
         public IActionResult Create()
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             ViewBag.DestinationList = new SelectList(_destinationService.GetAllDestinations(), "Id", null);
             ViewBag.UserList = new SelectList(_userService.GetAllGuides(), "Id", "FirstName");
             ViewBag.TagList = new SelectList(_tagService.GetAllTags(), "Id", "Name");
@@ -100,6 +114,10 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Create")]
         public IActionResult Create([Bind("Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             if (ModelState.IsValid)
             {
                 List<Itinerary> Itineraries = _itineraryService.GetAllItinerariesByIds(travelPackageDto.Itineraries);
@@ -174,7 +192,10 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
             if (travelPackage == null)
             {
@@ -215,6 +236,11 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Edit/{id}")]
         public IActionResult Edit(Guid id, [Bind("Id, Title, Details, BasePrice, DepartureDate, ReturnDate, DestinationId, MaxCapacity, Season, UserId, TransportType, Tags, Itineraries, DepartureLocations")] TravelPackageDTO travelPackageDto)
         {
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
             if (id != travelPackageDto.Id)
             {
                 return NotFound();
@@ -304,6 +330,14 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Delete/{id?}")]
         public IActionResult Delete(Guid id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var travelPackage = _travelPackageService.GetDetailsForTravelPackage(id);
             if (travelPackage == null)
             {
@@ -317,6 +351,14 @@ namespace TravelAgencyApplication.Web.Controllers
         [Route("Admin/[controller]/Delete/{id?}")]
         public IActionResult Delete(Guid? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if (!_authorizationService.IsUserAuthorized(out var currentUser))
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId != null && id != null)
             {

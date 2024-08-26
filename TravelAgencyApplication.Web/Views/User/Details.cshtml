@@ -1,4 +1,5 @@
 ﻿@model TravelAgencyApplication.Domain.Identity.TAUser
+
 @{
     ViewData["Title"] = "User Details";
 }
@@ -9,14 +10,20 @@
     <h4>@Model.FirstName @Model.LastName</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">Username</dt>
+        <dd class="col-sm-10">@Model.UserName</dd>
+
         <dt class="col-sm-2">Phone Number</dt>
         <dd class="col-sm-10">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-2">User Role</dt>
+        <dd class="col-sm-10">@Model.UserRole</dd>
     </dl>
 </div>
 
 @if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) > 0) == true)
 {
-    <div>
+    <div class="mt-4">
         <h4>Future Reservations</h4>
         <hr />
         <table class="table">
@@ -36,11 +43,11 @@
                         <td>
                             @if (reservation.HasPaid)
                             {
-                                <span>Has Paid</span>
+                                <span class="text-success">Paid</span>
                             }
                             else
                             {
-                                <span>Not Paid</span>
+                                <span class="text-danger">Not Paid</span>
                             }
                         </td>
                     </tr>
@@ -52,7 +59,7 @@
 
 @if (Model.Reservations?.Any(d => d.TravelPackage.ReturnDate.CompareTo(DateTime.Now) <= 0) == true)
 {
-    <div>
+    <div class="mt-4">
         <h4>Past Reservations</h4>
         <hr />
         <table class="table">
@@ -75,7 +82,7 @@
     </div>
 }
 
-<div>
+<div class="mt-4">
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
