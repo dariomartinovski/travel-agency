@@ -25,9 +25,9 @@
                     <td>@itinerary.Date.ToShortDateString()</td>
                     <td>@itinerary.Destination?.ToString()</td>
                     <td>
-                        <a href="@Url.Action("Details", new { id = itinerary.Id })" class="btn btn-info">Details</a>
-                        <a href="@Url.Action("Edit", new { id = itinerary.Id })" class="btn btn-warning">Edit</a>
-                        <a href="@Url.Action("Delete", new { id = itinerary.Id })" class="btn btn-danger">Delete</a>
+                        <a href="@Url.Action("Details","Itinerary", new { id = itinerary.Id })" class="btn btn-info">Details</a>
+                        <a href="@Url.Action("Edit","Itinerary", new { id = itinerary.Id })" class="btn btn-warning">Edit</a>
+                            <a href="@Url.Action("Delete","Itinerary", new { id = itinerary.Id })" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }
