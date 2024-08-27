@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelAgencyApplication.Domain.DTO;
 using TravelAgencyApplication.Domain.Model;
 using TravelAgencyApplication.Repository.Interface;
 using TravelAgencyApplication.Service.Interface;
@@ -40,6 +41,11 @@ namespace TravelAgencyApplication.Service.Implementation
         public Reservation GetDetailsForReservation(Guid? id)
         {
             return _reservationRepository.Get(id);
+        }
+
+        public ReservationDTO GetDetails(BaseEntity id)
+        {
+            return _reservationRepository.GetDetailsForReservation(id.Id);
         }
 
         public void UpdateExistingReservation(Reservation p)

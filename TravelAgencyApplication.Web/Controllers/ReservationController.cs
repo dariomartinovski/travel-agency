@@ -1,8 +1,13 @@
 ﻿using EShop.Domain;
+using GemBox.Document;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Stripe;
+using Stripe.Climate;
 using System.Security.Claims;
+using System.Text;
+using TravelAgencyApplication.Domain.DTO;
 using TravelAgencyApplication.Domain.Enum;
 using TravelAgencyApplication.Domain.Model;
 using TravelAgencyApplication.Domain.ViewModel;
@@ -21,6 +26,8 @@ namespace TravelAgencyApplication.Web.Controllers
             _travelPackageService = travelPackageService;
             _reservationService = reservationService;
             _stripeSettings = stripeSettings.Value;
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
 
         }
 
@@ -114,9 +121,63 @@ namespace TravelAgencyApplication.Web.Controllers
             }
             else
             {
+                var reservation = new Reservation
+                {
+                    UserId = userId,
+                    TravelPackageId = travelPackageId,
+                    Date = DateTime.Now,
+                    NumberOfPeople = numberOfPeople,
+                    TotalPrice = totalPrice,
+                    ReservationStatus = ReservationStatus.PENDING,
+                    HasPaid = false
+                };
+
+                _reservationService.CreateNewReservation(reservation);
+                int currentCapacity = travelPackage.CurrentCapacity - reservation.NumberOfPeople;
+                travelPackage.CurrentCapacity = currentCapacity;
+                _travelPackageService.UpdateExistingTravelPackage(travelPackage);
                 return RedirectToAction("NotSuccessPayment");
             }
         }
+        public FileContentResult CreateReservationInvoice(Guid Id)
+        {
+            HttpClient client = new HttpClient();
+            string URL = "https://localhost:7262/api/Admin/GetDetails";
+            var model = new
+            {
+                Id = Id
+            };
+
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PostAsync(URL, content).Result;
+
+            var result = response.Content.ReadAsAsync<ReservationDTO>().Result;
+
+            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Invoice.docx");
+            var document = DocumentModel.Load(templatePath);
+
+            document.Content.Replace("{{ReservationNumber}}", result.Id.ToString());
+            document.Content.Replace("{{UserName}}", result.UserName);
+            document.Content.Replace("{{TravelPackage}}", result.TravelPackageTitle);
+
+            StringBuilder itineraryList = new StringBuilder();
+            foreach (var item in result.ItineraryTitles)
+            {
+                itineraryList.AppendLine($"{item}");
+            }
+            document.Content.Replace("{{ItineraryList}}", itineraryList.ToString());
+
+            document.Content.Replace("{{NumberOfPeople}}", result.NumberOfPeople.ToString());
+            document.Content.Replace("{{HasPaid}}", result.HasPaid? "Yes" : "No");
+            document.Content.Replace("{{TotalPrice}}", result.TotalPrice.ToString() + "$");
+
+            var stream = new MemoryStream();
+            document.Save(stream, new PdfSaveOptions());
+            return File(stream.ToArray(), new PdfSaveOptions().ContentType, "ReservationInvoice.pdf");
+        }
+
+
 
     }
 }

@@ -4,13 +4,13 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<form asp-controller="User" asp-action="ImportUsers" method="post" enctype="multipart/form-data" id="importForm">
+<form asp-controller="User" asp-action="ImportUsers" method="post" enctype="multipart/form-data" id="importForm" class="mb-2">
     <div class="form-group">
         <p class="h6">Import Users </p>
         <input type="file" name="file" class="form-control" required />
         <span class="text-danger" id="fileValidationMessage"></span>
     </div>
-    <button type="submit" class="btn btn-success my-2">Import Excel</button>
+    <button type="submit" class="btn btn-success my-3">Import Excel</button>
 </form>
 
 <table class="table">

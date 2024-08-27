@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Stripe.Climate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelAgencyApplication.Domain.DTO;
 using TravelAgencyApplication.Domain.Model;
 using TravelAgencyApplication.Repository.Interface;
 using TravelAgencyApplication.Web.Data;
@@ -24,8 +26,8 @@ namespace TravelAgencyApplication.Repository.Implementation
         public IEnumerable<Reservation> GetAll()
         {
             return entities
-                .Include(t => t.User)
-                .Include(t => t.TravelPackage)
+                //.Include(t => t.User)
+                //.Include(t => t.TravelPackage)
                 .ToList();
         }
 
@@ -34,8 +36,35 @@ namespace TravelAgencyApplication.Repository.Implementation
             return entities
                 .Include(t => t.User)
                 .Include(t => t.TravelPackage)
-                .SingleOrDefault(s => s.Id == id);
+                .Include("TravelPackage.Itineraries")
+                .SingleOrDefaultAsync(s => s.Id == id).Result;
         }
+      
+        public ReservationDTO GetDetailsForReservation(Guid id)
+        {
+            var reservation = entities
+                .Include(z=> z.User)
+                .Include(z => z.TravelPackage)
+                .Include("TravelPackage.Itineraries")
+                .Include("TravelPackage.Itineraries.Itinerary")
+                .SingleOrDefaultAsync(z => z.Id == id)
+                .Result;
+
+            if (reservation == null) 
+                throw new ArgumentNullException("reservation");
+
+            return new ReservationDTO
+            {
+                Id = reservation.Id,
+                UserName = reservation.User.UserName,
+                TravelPackageTitle = reservation.TravelPackage.Title,
+                ItineraryTitles = reservation.TravelPackage.Itineraries.Select(i => i.Itinerary?.Title),
+                NumberOfPeople = reservation.NumberOfPeople,
+                HasPaid = reservation.HasPaid,
+                TotalPrice = reservation.TotalPrice
+            };
+        }
+
         public void Insert(Reservation entity)
         {
             if (entity == null)

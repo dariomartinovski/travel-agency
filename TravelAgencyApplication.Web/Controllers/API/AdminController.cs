@@ -3,6 +3,8 @@ using TravelAgencyApplication.Domain.DTO;
 using Microsoft.AspNetCore.Identity;
 using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Domain.Model;
+using Stripe.Climate;
+using TravelAgencyApplication.Service.Interface;
 namespace TravelAgencyApplication.Web.Controllers.API
 {
     [Route("api/[controller]")]
@@ -10,10 +12,11 @@ namespace TravelAgencyApplication.Web.Controllers.API
     public class AdminController : ControllerBase
     {
         private readonly UserManager<TAUser> _userManager;
-
-        public AdminController(UserManager<TAUser> userManager)
+        private readonly IReservationService _reservationService;
+        public AdminController(UserManager<TAUser> userManager, IReservationService reservationService)
         {
             _userManager = userManager;
+            _reservationService = reservationService;
         }
 
         [HttpPost("[action]")]
@@ -50,6 +53,13 @@ namespace TravelAgencyApplication.Web.Controllers.API
         }
         return status;
     }
+      
+        [HttpPost("[action]")]
+         public ReservationDTO GetDetails(BaseEntity model)
+        {
+            return _reservationService.GetDetails(model);
+        }
+      
 
-}
+    }
 }

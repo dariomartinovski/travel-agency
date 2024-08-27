@@ -57,7 +57,10 @@
                                         <span class="text-danger">Not Paid</span>
                                     }
                                 </td>
-                                <td><a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a></td>
+                                <td>
+                                    <a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a>
+                                <a asp-controller="Reservation" asp-action="CreateReservationInvoice" asp-route-Id="@reservation.Id" class="btn btn-danger">Create Invoice</a>
+                            </td>
                             </tr>
                         }
                     </tbody>
@@ -88,7 +91,11 @@
                             <tr>
                                 <td>@reservation.Date.ToShortDateString()</td>
                                 <td>@reservation.TotalPrice.ToString("C")</td>
-                                <td><a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a></td>
+                                <td>
+                                    <a asp-action="Details" asp-controller="TravelPackage" asp-route-id="@reservation.TravelPackageId" class="btn btn-primary">View Details</a>
+                                <a asp-controller="Reservation" asp-action="CreateReservationInvoice" asp-route-Id="@reservation.Id" class="btn btn-danger">Create Invoice</a>
+
+                            </td>
 
                             </tr>
                         }
