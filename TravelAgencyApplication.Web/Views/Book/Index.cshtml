@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TravelAgencyApplication.Domain.Model.Book>
+
+@{
+    ViewData["Title"] = "Books";
+
+    string TruncateText(string text, int maxWords)
+    {
+        var words = text.Split(' ');
+        if (words.Length <= maxWords)
+        {
+            return text;
+        }
+
+        return string.Join(" ", words.Take(maxWords)) + "...";
+    }
+}
+
+<h1 class="mt-4 mb-4">@ViewData["Title"]</h1>
+
+<div class="container" style="min-height: 73vh;">
+    <div class="row">
+        @foreach (var book in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    @if (book.BookImage != null)
+                    {
+                        <img src="@book.BookImage" class="card-img-top book-image" alt="Book Image" style="max-height: 17em;">
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Book Image" style="max-height: 17em;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">@TruncateText(book.PublisherDescription, 10)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Author: @book.AuthorName @book.AuthorLastName</span>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .book-image {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain; /* Ensures the image is not stretched */
+    }
+</style>

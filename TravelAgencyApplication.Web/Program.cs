@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using TravelAgencyApplication.Domain.Identity;
-using TravelAgencyApplication.Repository.Data;
 using TravelAgencyApplication.Repository.Implementation;
 using TravelAgencyApplication.Repository.Interface;
 using TravelAgencyApplication.Service.Implementation;
@@ -44,6 +43,8 @@ builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<ICountryService, CountryService>();
 builder.Services.AddTransient<ITravelPackageDepartureLocationService, TravelPackageDepartureLocationService>();
 builder.Services.AddTransient<ITravelPackageTagService, TravelPackageTagService>();
+builder.Services.AddTransient<IBookService, BookService>();
+
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 builder.Services.AddScoped<AuthorizationService>();
 

@@ -1,0 +1,49 @@
+﻿@model TravelAgencyApplication.Domain.Model.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            @if (Model.BookImage != null)
+            {
+                <img src="@Model.BookImage" class="card-img-top book-detail-image" alt="Book Image">
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/300" class="book-detail-image" alt="Placeholder Image">
+            }
+        </div>
+        <div class="col-md-8">
+            <h3>@Model.Title</h3>
+            <p><strong>Author:</strong> @Model.AuthorName @Model.AuthorLastName</p>
+            <p><strong>Publisher:</strong> @Model.PublisherName</p>
+            <p><strong>Price:</strong> $@Model.Price</p>
+            <p><strong>Description:</strong> @Model.PublisherDescription</p>
+            <p><strong>Book Details:</strong> @Model.Title</p>
+        </div>
+    </div>
+
+    <hr />
+
+    <div>
+        <h4>Description</h4>
+        <p>@Model.PublisherDescription</p>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+<style>
+    .book-detail-image {
+        max-width: 100%;
+        max-height: 20em;
+        object-fit: contain;
+    }
+</style>

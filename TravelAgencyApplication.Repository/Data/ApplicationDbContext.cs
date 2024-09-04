@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Domain.Model;
-using TravelAgencyApplication.Repository.Data;
 
 namespace TravelAgencyApplication.Web.Data
 {
@@ -19,6 +18,7 @@ namespace TravelAgencyApplication.Web.Data
         public virtual DbSet<TravelPackageTag> TravelPackageTags { get; set; }
         public virtual DbSet<TravelPackageDepartureLocation> TravelPackageDepartureLocations { get; set; }
         public virtual DbSet<TravelPackageItinerary> TravelPackageItineraries { get; set; }
+        public virtual DbSet<Book> Books { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
