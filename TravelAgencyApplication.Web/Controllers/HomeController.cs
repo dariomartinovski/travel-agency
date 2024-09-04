@@ -26,15 +26,7 @@ namespace TravelAgencyApplication.Web.Controllers
 
         public IActionResult Index()
         {
-            //var userId = User.Identity.GetUserId();
-            //var currentUser = _userService.GetDetailsForTAUser(userId);
-
-            //var homeView = new HomeViewModel
-            //{
-            //    user = currentUser,
-            //};
-
-            List<TravelPackage> TravelPackages = _travelPackageService.GetAllTravelPackages().Take(8).ToList();
+            List<TravelPackage> TravelPackages = _travelPackageService.GetAllTravelPackages().Take(6).ToList();
             return View(TravelPackages);
         }
 

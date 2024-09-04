@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Repository.Data;
 using TravelAgencyApplication.Repository.Implementation;
 using TravelAgencyApplication.Repository.Interface;
 using TravelAgencyApplication.Service.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace TravelAgencyApplication.Service.Implementation
 {

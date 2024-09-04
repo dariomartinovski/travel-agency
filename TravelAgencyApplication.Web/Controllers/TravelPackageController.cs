@@ -7,6 +7,7 @@ using TravelAgencyApplication.Domain.DTO;
 using TravelAgencyApplication.Domain.Enum;
 using TravelAgencyApplication.Domain.Identity;
 using TravelAgencyApplication.Domain.Model;
+using TravelAgencyApplication.Domain.ViewModel;
 using TravelAgencyApplication.Service.Implementation;
 using TravelAgencyApplication.Service.Interface;
 using TravelAgencyApplication.Web.Data;
@@ -58,7 +59,14 @@ namespace TravelAgencyApplication.Web.Controllers
             {
                 return NotFound();
             }
-            return View(travelPackage);
+            Boolean isAuthenticated = _authorizationService.IsUserAuthenticated(out var currentUser);
+
+            var model = new TravelPackageViewModel {
+                TravelPackage = travelPackage,
+                IsAuthenticated = isAuthenticated
+            };
+
+            return View(model);
         }
 
         [Route("Admin/[controller]")]

@@ -56,11 +56,27 @@
     box-shadow: 0 0 1em rgba(255,255,255, 0.2);
 }
 
+@media (max-width: 67em) {
+    #landingSection .customerContainer {
+        padding: 15em 0 0 2em;
+        display: inline-block;
+    }
+    #landingSection .customerContainer h1 {
+        font-size: 4em;
+    }
+
+    #landingSection .customerContainer h3 {
+        font-size: 2em;
+    }
+    #landingSection .customerContainer p {
+        font-size: 1.1em;
+        max-width: 60vw;
+    }
+}
 
 #beachSection{
     margin-top: 5em;
     display: grid;
-    grid-template-columns: 1fr 1fr;
     min-height: 60vh;
 }
 
@@ -92,4 +108,10 @@
 #featuredTravelPackages h1 {
     margin-bottom: 0.7em;
     font-weight: 700;
+}
+
+@media (min-width: 67em) {
+    #beachSection {
+        grid-template-columns: 1fr 1fr;
+    }
 }

@@ -37,5 +37,17 @@ namespace TravelAgencyApplication.Service.Implementation
 
             return true;
         }
+
+        public bool IsUserAuthenticated(out TAUser currentUser)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            currentUser = null;
+
+            if (userId == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

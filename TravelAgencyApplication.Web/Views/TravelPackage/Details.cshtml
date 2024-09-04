@@ -1,4 +1,4 @@
-﻿@model TravelAgencyApplication.Domain.Model.TravelPackage
+﻿@model TravelAgencyApplication.Domain.ViewModel.TravelPackageViewModel
 
 @{
     ViewData["Title"] = "Travel Package Details";
@@ -9,9 +9,9 @@
 
     <div class="row">
         <div class="col-md-4">
-            @if (Model.ImageUrl != null)
+            @if (Model.TravelPackage.ImageUrl != null)
             {
-                <img src="@Model.ImageUrl" class="card-img-top" alt="Travel Package Image">
+                <img src="@Model.TravelPackage.ImageUrl" class="card-img-top" alt="Travel Package Image">
             }
             else
             {
@@ -19,27 +19,27 @@
             }
         </div>
         <div class="col-md-8">
-            <h3>@Model.Title</h3>
-            <p><strong>Starting from:</strong> $@Model.BasePrice</p>
-            <p><strong>Departure Date:</strong> @Model.DepartureDate.ToShortDateString()</p>
-            <p><strong>Return Date:</strong> @Model.ReturnDate.ToShortDateString()</p>
-            <p><strong>Destination:</strong> @Model.Destination?.ToString()</p>
+            <h3>@Model.TravelPackage.Title</h3>
+            <p><strong>Starting from:</strong> $@Model.TravelPackage.BasePrice</p>
+            <p><strong>Departure Date:</strong> @Model.TravelPackage.DepartureDate.ToShortDateString()</p>
+            <p><strong>Return Date:</strong> @Model.TravelPackage.ReturnDate.ToShortDateString()</p>
+            <p><strong>Destination:</strong> @Model.TravelPackage.Destination?.ToString()</p>
             <p>
                 <strong>Transport Type:</strong>
-                <i class="fa @(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "fa-bus" :
-                             Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "fa-plane" :
-                             Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "fa-ship" : "")"></i>
-               @(Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "Bus" :
-                    Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "Airplane" :
-                    Model.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "Ship" : "")
+                <i class="fa @(Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "fa-bus" :
+                             Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "fa-plane" :
+                             Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "fa-ship" : "")"></i>
+               @(Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BUS ? "Bus" :
+                    Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.AIRPLANE ? "Airplane" :
+                    Model.TravelPackage.TransportType == TravelAgencyApplication.Domain.Enum.TransportType.BOAT ? "Ship" : "")
             <p>
             <p>
                 <strong>Season:</strong>
-                <i class="fa @(Model.Season == TravelAgencyApplication.Domain.Enum.Season.SPRING ? "fa-seedling" :
-                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER ? "fa-umbrella-beach" :
-                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN ? "fa-leaf" :
-                     Model.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER ? "fa-snowflake" : "")"></i>
-                        @Model.Season.ToString().ToLowerInvariant().First().ToString().ToUpperInvariant()@Model.Season.ToString().ToLowerInvariant().Substring(1)
+                <i class="fa @(Model.TravelPackage.Season == TravelAgencyApplication.Domain.Enum.Season.SPRING ? "fa-seedling" :
+                     Model.TravelPackage.Season == TravelAgencyApplication.Domain.Enum.Season.SUMMER ? "fa-umbrella-beach" :
+                     Model.TravelPackage.Season == TravelAgencyApplication.Domain.Enum.Season.AUTUMN ? "fa-leaf" :
+                     Model.TravelPackage.Season == TravelAgencyApplication.Domain.Enum.Season.WINTER ? "fa-snowflake" : "")"></i>
+                        @Model.TravelPackage.Season.ToString().ToLowerInvariant().First().ToString().ToUpperInvariant()@Model.TravelPackage.Season.ToString().ToLowerInvariant().Substring(1)
             </p>
         </div>
     </div>
@@ -48,7 +48,7 @@
 
     <div>
         <h4>Description</h4>
-        <p>@Model.Details</p>
+        <p>@Model.TravelPackage.Details</p>
     </div>
 
     <div>
@@ -64,7 +64,7 @@
     <div>
         <h4>What's Not Included in the Price</h4>
         <ul>
-            @foreach (var itinerary in Model.Itineraries)
+            @foreach (var itinerary in Model.TravelPackage.Itineraries)
             {
                 <li>
                     <b>@itinerary.Itinerary.Title</b> - $@itinerary.Itinerary.Price on @itinerary.Itinerary.Date.ToShortDateString()
@@ -90,20 +90,21 @@
         </ul>
     </div>
 
-    <div class="mt-4">
-        <form asp-action="PayOrder" asp-controller="Reservation" method="get" id="reservationForm">
-            <input type="hidden" name="travelPackageId" value="@Model.Id" />
+    @if(Model.IsAuthenticated){
+        <div class="mt-4">
+            <form asp-action="PayOrder" asp-controller="Reservation" method="get" id="reservationForm">
+                <input type="hidden" name="travelPackageId" value="@Model.TravelPackage.Id" />
 
-            <div class="form-group">
-                <label for="numberOfPeople">Number of People:</label>
-                <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" min="1" required />
-                <span id="error-message" class="text-danger" style="display:none;">The number of people exceeds the remaining capacity. There are only @Model.CurrentCapacity places left.</span>
-            </div>
+                <div class="form-group">
+                    <label for="numberOfPeople">Number of People:</label>
+                    <input type="number" id="numberOfPeople" name="numberOfPeople" class="form-control" min="1" required />
+                    <span id="error-message" class="text-danger" style="display:none;">The number of people exceeds the remaining capacity. There are only @Model.TravelPackage.CurrentCapacity places left.</span>
+                </div>
 
-            <button type="submit" class="btn btn-primary mt-2">Make a Reservation</button>
-        </form>
-    </div>
-
+                <button type="submit" class="btn btn-primary mt-2">Make a Reservation</button>
+            </form>
+        </div>    
+    }
     <div class="mt-4">
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
@@ -112,8 +113,8 @@
 @section Scripts {
     <script>
         document.getElementById("reservationForm").addEventListener("submit", function (event) {
-            var maxCapacity = @Model.MaxCapacity;
-            var currentCapacity = @Model.CurrentCapacity;
+            var maxCapacity = @Model.TravelPackage.MaxCapacity;
+            var currentCapacity = @Model.TravelPackage.CurrentCapacity;
             var numberOfPeople = document.getElementById("numberOfPeople").value;
 
             if (currentCapacity - numberOfPeople < 0) {

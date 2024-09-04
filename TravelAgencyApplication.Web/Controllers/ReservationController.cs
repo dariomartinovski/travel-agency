@@ -27,14 +27,8 @@ namespace TravelAgencyApplication.Web.Controllers
             _reservationService = reservationService;
             _stripeSettings = stripeSettings.Value;
             ComponentInfo.SetLicense("FREE-LIMITED-KEY");
-
-
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
         public IActionResult SuccessPayment()
         {
             return View();
@@ -46,6 +40,10 @@ namespace TravelAgencyApplication.Web.Controllers
         }
        public IActionResult PayOrder(Guid travelPackageId, int numberOfPeople)
         {
+            if(travelPackageId == null || travelPackageId == Guid.Empty || numberOfPeople == null || numberOfPeople <= 0) {
+                return NotFound();
+            }
+
             var travelPackage = _travelPackageService.GetDetailsForTravelPackage(travelPackageId);
             int totalPrice = (int)(travelPackage.BasePrice * numberOfPeople);
             var model = new PaymentViewModel
